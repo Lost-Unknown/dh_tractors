@@ -99,6 +99,11 @@ const Report = () => {
                     {new Date(row.saledate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {row.docs ?<>
+                    <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`https://${row.docs}`}>
+                      Documents
+                    </Link>
+                    </>:<></>}
                     <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`/BuyerDetails/Edit?id=${row._id}`}>
                       Edit
                     </Link>

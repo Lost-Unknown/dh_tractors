@@ -12,6 +12,8 @@ const NavBar = () => {
         <div className=' w-max rounded-3xl h-auto flex bg-blue-400'>
           <Link className='px-5 py-2 text-white font-bold' href={"/Report"}  >Sales Report</Link>
           <Link className='px-5 py-2 text-white font-bold' href={"/New_Sale"} >New Sale</Link>
+          <Link className='px-5 py-2 text-white font-bold' href={"/Service_Invoice"} >Service Bill</Link>
+          <Link className='px-5 py-2 text-white font-bold' href={"/Stock_Transfer"} >Stock Transfer</Link>
         </div>
     </nav>
   )

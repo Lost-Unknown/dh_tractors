@@ -11,6 +11,7 @@ const BuyerDetails = () => {
         saledate: "",
         mobile: "",
         address: "",
+        docs:"",
         model: "",
         chassis: "",
         engine: "",

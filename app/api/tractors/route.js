@@ -15,9 +15,10 @@ export async function POST(request) {
       saledate: today,
       model: body.model,
       chassis: body.chassis,
-      enigne: body.enigne,
+      engine: body.engine,
       mobile: body.mobile,
       address: body.address,
+      docs: body.docs,
       saleamount: body.saleamount,
       cashamount: body.cashamount, // array of { amount, receivedate }
       onlineamount: body.onlineamount,
@@ -43,7 +44,7 @@ export async function POST(request) {
   }
   catch (e) {
     console.error(e)
-    return new Response("Something Went Wrong!", { status: 500 })
+    return new Response("Something Went Wrong!" + e, { status: 500 })
   }
 }
 
@@ -65,6 +66,7 @@ export async function PATCH(request) {
     };
     
     const newTractor = {
+      docs: body.docs,
       cashamount: processArray(body.cashamount),
       onlineamount: processArray(body.onlineamount),
       chequeamount: processArray(body.chequeamount),

@@ -15,9 +15,10 @@ const Buyer_Edit = () => {
         fname: '',
         model: '',
         chassis: '',
-        enigne: '',
+        engine: '',
         mobile: 0,
         address: '',
+        docs:'',
         saleamount: 0,
         cashamount: [{ amount: 0, receivedate: new Date() }],
         onlineamount: [{ amount: 0, transid: '', receivedate: new Date() }],
@@ -184,7 +185,7 @@ const Buyer_Edit = () => {
         if (!formData.fname) newErrors.fname = "Father's name is required";
         if (!formData.model) newErrors.model = 'Model is required';
         if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-        if (!formData.enigne) newErrors.enigne = 'Engine number is required';
+        if (!formData.engine) newErrors.engine = 'Engine number is required';
         if (!formData.address) newErrors.address = 'Address is required';
         
         // Required number fields
@@ -313,13 +314,13 @@ const Buyer_Edit = () => {
               </label>
               <input
                 type="text"
-                name="enigne"
-                value={formData.enigne}
+                name="engine"
+                value={formData.engine}
                 onChange={handleInputChange}
                 readOnly
-                className={`w-full px-3 py-2 border rounded-md ${errors.enigne ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
               />
-              {errors.enigne && <p className="text-red-500 text-xs mt-1">{errors.enigne}</p>}
+              {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
             </div>
             
             <div>
@@ -352,6 +353,18 @@ const Buyer_Edit = () => {
             />
             {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
           </div>
+          <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Documents
+              </label>
+              <input
+                name="docs"
+                value={formData.docs}
+                onChange={handleInputChange}
+                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? 'border-red-500' : 'border-gray-300'}`}
+              />
+              {errors.docs && <p className="text-red-500 text-xs mt-1">{errors.docs}</p>}
+            </div>
         </div>
         
         {/* Sale Information */}

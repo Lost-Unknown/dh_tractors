@@ -6,9 +6,10 @@ const TractorSchema = new Schema({
     saledate:{type:Date,required:[true]},
     model:{type:String, required :[true]},
     chassis:{type:String, required :[true]},
-    enigne:{type:String, required :[true]},
+    engine:{type:String, required :[true]},
     mobile:{type:Number, required :[true]},
     address:{type:String, required :[true]},
+    docs:{type:String},
     saleamount:{type:Number, required :[true]},
     cashamount:[{
         amount:{type:Number},

@@ -11,7 +11,7 @@ export async function GET (request,context){
               $gte: new Date(startDate),
               $lte: new Date(endDate),
             },
-          }).select("bname fname mobile model saledate");
+          }).select("bname fname mobile model saledate docs");
         if(!Tractors)
             return new Response("Data Not Found",{status:404})
         return new Response(JSON.stringify(Tractors), { status: 200 })
