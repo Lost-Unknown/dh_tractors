@@ -1,8 +1,9 @@
 import React from 'react'
 
-export const AddSpare = () => {
-    
+const Add_Spares = () => {
   return (
     <div></div>
   )
 }
+
+export default Add_Spares

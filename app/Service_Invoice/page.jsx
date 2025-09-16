@@ -12,9 +12,9 @@ const TractorForm = () => {
     chassis: '',
     engine: '',
     mobile: 0,
-    hours:0,
-    spares: [{ Code: '',hsn:'', name:'',MRP:0,Final:0 }],
-    jobs:[{type:'',cost:''}]
+    hours: 0,
+    spares: [{ Code: '', hsn: '', name: '', MRP: 0, Final: 0 }],
+    jobs: [{ type: '', cost: '' }]
   });
 
   // Form validation state
@@ -53,11 +53,11 @@ const TractorForm = () => {
     setFormData({ ...formData, spares: updatedSpares });
   };
 
-   // Add new cash amount entry
+  // Add new cash amount entry
   const addSpares = () => {
     setFormData({
       ...formData,
-      spares: [...formData.spares, { Code: '',hsn:'', name:'',MRP:0,Final:0 }]
+      spares: [...formData.spares, { Code: '', hsn: '', name: '', MRP: 0, Final: 0 }]
     });
     console.log(formData)
   };
@@ -79,11 +79,11 @@ const TractorForm = () => {
     setFormData({ ...formData, jobs: updatedJobs });
   };
 
-   // Add new cash amount entry
+  // Add new cash amount entry
   const addJobs = () => {
     setFormData({
       ...formData,
-      jobs: [...formData.jobs, { type: '',cost:0}]
+      jobs: [...formData.jobs, { type: '', cost: 0 }]
     });
   };
 
@@ -151,23 +151,41 @@ const TractorForm = () => {
 
   return (
     <div className="w-full p-6 bg-white rounded-lg shadow-md">
-      <Link href={"/Spare_Invoice/Add_Spares"}>Add Spare</Link>
+      <div className='flex w-full justify-end'>
+        <Link className='bg-blue-500 px-4 py-2 hover:bg-blue-700 text-white rounded-lg m-1' href={"/Service_Invoice/Add_Spares"}>Add Spare</Link>
+      </div>
       <h1 className="text-2xl font-bold mb-6">Generate Service Invoice</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Owner Name
-          </label>
-          <input
-            type="text"
-            name="ownername"
-            value={formData.ownername}
-            onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.ownername ? 'border-red-500' : 'border-gray-300'}`}
-          />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.ownername}</p>}
+        <div className='flex gap-3'>
+          <div className='w-1/2'>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Owner Name
+            </label>
+            <input
+              type="text"
+              name="ownername"
+              value={formData.ownername}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-md ${errors.ownername ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.ownername}</p>}
+          </div>
+          <div className='w-1/2'>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Mobile No.
+            </label>
+            <input
+              type="number"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleInputChange}
+              className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+            />
+            {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
+          </div>
         </div>
-        <div>
+        <div className='flex gap-3'>
+          <div className='w-1/2'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Chassis No.
           </label>
@@ -180,7 +198,7 @@ const TractorForm = () => {
           />
           {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
         </div>
-        <div>
+        <div className='w-1/2'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Engine No.
           </label>
@@ -193,20 +211,9 @@ const TractorForm = () => {
           />
           {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Mobile No.
-          </label>
-          <input
-            type="number"
-            name="mobile"
-            value={formData.mobile}
-            onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
-          />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
         </div>
-        <div>
+        <div className='flex gap-3'>
+        <div className='w-1/2'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Current Hours
           </label>
@@ -218,6 +225,20 @@ const TractorForm = () => {
             className={`w-full px-3 py-2 border rounded-md ${errors.hours ? 'border-red-500' : 'border-gray-300'}`}
           />
           {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.hours}</p>}
+        </div>
+        <div className='w-1/2'>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Model
+          </label>
+          <input
+            type="text"
+            name="model"
+            value={formData.model}
+            onChange={handleInputChange}
+            className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+          />
+          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.hours}</p>}
+        </div>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -232,81 +253,81 @@ const TractorForm = () => {
           />
           {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.invoice_date}</p>}
         </div>
-        
-          <hr className='my-2' />
+
+        <hr className='my-2' />
 
         {/* Spares */}
         <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Spares</h2>
-            {formData.spares.map((spare, index) => (
-              <div key={`spare-${index}`} className="flex items-end gap-4 mb-4">
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Code
-                  </label>
-                  <input
-                    type="text"
-                    value={spare.Code}
-                    onChange={(e) => handleSpareChange(index, 'Code', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    HSN
-                  </label>
-                  <input
-                    type="text"
-                    value={spare.hsn}
-                    readOnly
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    readOnly
-                    value={spare.name}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    MRP
-                  </label>
-                  <input
-                    type="text"
-                    readOnly
-                    value={spare.MRP}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Final
-                  </label>
-                  <input
-                    type="text"
-                    value={spare.Final}
-                    onChange={(e) => handleSpareChange(index, 'Final', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {removeSpare(index)}}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                )}
+          <h2 className="text-xl font-semibold mb-3">Spares</h2>
+          {formData.spares.map((spare, index) => (
+            <div key={`spare-${index}`} className="flex items-end gap-4 mb-4">
+              <div className="flex flex-col w-1/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Code
+                </label>
+                <input
+                  type="text"
+                  value={spare.Code}
+                  onChange={(e) => handleSpareChange(index, 'Code', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
               </div>
-            ))}
-            <div className='flex gap-2'>
+              <div className="flex flex-col w-1/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  HSN
+                </label>
+                <input
+                  type="text"
+                  value={spare.hsn}
+                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-2/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={spare.name}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-1/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  MRP
+                </label>
+                <input
+                  type="text"
+                  readOnly
+                  value={spare.MRP}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-1/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Final
+                </label>
+                <input
+                  type="text"
+                  value={spare.Final}
+                  onChange={(e) => handleSpareChange(index, 'Final', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              {index > 0 && (
+                <button
+                  type="button"
+                  onClick={() => { removeSpare(index) }}
+                  className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <div className='flex gap-2'>
             <button
               type="button"
               onClick={addSpares}
@@ -316,72 +337,72 @@ const TractorForm = () => {
             </button>
             <button
               type="button"
-              onClick={() =>{}}
+              onClick={() => { }}
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-900"
             >
               Validate Spares
             </button>
-            </div>
           </div>
-          <hr className='my-2' />
-          {/* Jobs */}
+        </div>
+        <hr className='my-2' />
+        {/* Jobs */}
         <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Jobs</h2>
-            {formData.jobs.map((job, index) => (
-              <div key={`job-${index}`} className="flex items-end gap-4 mb-4">
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Type
-                  </label>
-                  <input
-                    type="text"
-                    value={job.type}
-                    onChange={(e) => handleJobsChange(index, 'type', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cost
-                  </label>
-                  <input
-                    type="cost"
-                    value={job.cost}
-                    onChange={(e) => handleJobsChange(index, 'cost', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {removeJobs(index)}}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                )}
+          <h2 className="text-xl font-semibold mb-3">Jobs</h2>
+          {formData.jobs.map((job, index) => (
+            <div key={`job-${index}`} className="flex items-end gap-4 mb-4">
+              <div className="flex-grow">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Type
+                </label>
+                <input
+                  type="text"
+                  value={job.type}
+                  onChange={(e) => handleJobsChange(index, 'type', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
               </div>
-            ))}
-            <button
-              type="button"
-              onClick={addJobs}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Add Jobs
-            </button>
-          </div>
+              <div className="flex-grow">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Cost
+                </label>
+                <input
+                  type="cost"
+                  value={job.cost}
+                  onChange={(e) => handleJobsChange(index, 'cost', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              {index > 0 && (
+                <button
+                  type="button"
+                  onClick={() => { removeJobs(index) }}
+                  className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addJobs}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Add Jobs
+          </button>
+        </div>
 
-          <hr className='my-2' />
+        <hr className='my-2' />
 
-          <div className='flex justify-end'>
-            <button
-              type="button"
-              onClick={()=>{}}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-900"
-            >
-              Generate Bill
-            </button>
-          </div>
+        <div className='flex justify-end'>
+          <button
+            type="button"
+            onClick={() => { }}
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-900"
+          >
+            Generate Bill
+          </button>
+        </div>
       </form>
     </div>
   );
