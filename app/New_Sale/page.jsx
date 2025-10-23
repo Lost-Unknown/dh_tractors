@@ -1,7 +1,7 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 const TractorForm = () => {
-  
+
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
     bname: '',
@@ -11,7 +11,13 @@ const TractorForm = () => {
     engine: '',
     mobile: 0,
     address: '',
-    docs:"",
+    docs: "",
+    GSTIN: "",
+    invoice: 0,
+    saledate: new Date(),
+    isIGST: false,
+    GST_Rate: 5,
+    bighsn: true,
     saleamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
     onlineamount: [{ amount: 0, transid: '', receivedate: new Date() }],
@@ -19,7 +25,6 @@ const TractorForm = () => {
     loanamount: 0,
     loantranid: '',
     loanprovider: '',
-    pendingamount: 0,
     oldtractorname: '',
     oldtractorsaleamount: 0,
     oldSaleMediator: '',
@@ -29,6 +34,11 @@ const TractorForm = () => {
     insureamount: 0
   });
 
+  const [lastData, setLastData] = useState({
+    lastInvoice: 0,
+    lastSaleDate: ""
+  });
+
   // Form validation state
   const [errors, setErrors] = useState({});
 
@@ -36,7 +46,7 @@ const TractorForm = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear error when field is edited
     if (errors[name]) {
       setErrors({ ...errors, [name]: undefined });
@@ -47,11 +57,17 @@ const TractorForm = () => {
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
-    
+
     // Clear error when field is edited
     if (errors[name]) {
       setErrors({ ...errors, [name]: undefined });
     }
+  };
+
+  // Handle boolean input changes
+  const handleBooleanChange = (e) => {
+    const { name, checked } = e.target;
+    setFormData({ ...formData, [name]: checked });
   };
 
   // Handle cash amount array updates
@@ -139,7 +155,7 @@ const TractorForm = () => {
   // Validate form before submission
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Required string fields
     if (!formData.bname) newErrors.bname = 'Buyer name is required';
     if (!formData.fname) newErrors.fname = "Father's name is required";
@@ -147,11 +163,11 @@ const TractorForm = () => {
     if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
     if (!formData.engine) newErrors.engine = 'Engine number is required';
     if (!formData.address) newErrors.address = 'Address is required';
-    
+
     // Required number fields
     if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
     if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
-    
+
     // Validate mobile number format
     if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
       newErrors.mobile = 'Please enter a valid mobile number';
@@ -164,7 +180,7 @@ const TractorForm = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return; // Stop submission if validation fails
     }
@@ -178,7 +194,7 @@ const TractorForm = () => {
         body: JSON.stringify(formData),
       });
       console.log(JSON.stringify(formData))
-      
+
       if (response.ok) {
         alert('Tractor data saved successfully!'); // Redirect to tractors list page
       } else {
@@ -193,15 +209,30 @@ const TractorForm = () => {
 
   // Format date for input field
   const formatDateForInput = (date) => {
-    return date instanceof Date 
-      ? date.toISOString().split('T')[0] 
+    return date instanceof Date
+      ? date.toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
   };
 
+  useEffect(() => {
+    const getLastRecord = async () => {
+      const response = await fetch(`/api/details`);
+      if (response.ok) {
+        const data = await response.json();
+        setLastData({
+          lastSaleDate: data.saledate.toString("dd-mm-yyyy"),
+          lastInvoice: data.invoice || 0
+        });
+        setFormData({ ...formData, invoice: lastData.lastInvoice +1 });
+      }
+    }
+    getLastRecord();
+  }, []);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">New Tractor Entry</h1>
-      
+      <h1 className="text-2xl font-bold">New Tractor Entry</h1>
+      <p className=' mb-6'>Last Invoice Date : {lastData.lastSaleDate},Last Invoic No. :{lastData.lastInvoice}</p>
+
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Basic Information */}
@@ -221,7 +252,7 @@ const TractorForm = () => {
                 />
                 {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.bname}</p>}
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Father's Name*
@@ -235,7 +266,7 @@ const TractorForm = () => {
                 />
                 {errors.fname && <p className="text-red-500 text-xs mt-1">{errors.fname}</p>}
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Model*
@@ -249,7 +280,7 @@ const TractorForm = () => {
                 />
                 {errors.model && <p className="text-red-500 text-xs mt-1">{errors.model}</p>}
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Chassis Number*
@@ -263,7 +294,7 @@ const TractorForm = () => {
                 />
                 {errors.chassis && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Engine Number*
@@ -277,7 +308,7 @@ const TractorForm = () => {
                 />
                 {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Mobile Number*
@@ -291,8 +322,83 @@ const TractorForm = () => {
                 />
                 {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  GSTIN
+                </label>
+                <input
+                  type="text"
+                  name="GSTIN"
+                  value={formData.GSTIN.GSTIN}
+                  onChange={handleInputChange}
+                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  GST Rate
+                </label>
+                <input
+                  type="number"
+                  name="GST_Rate"
+                  value={formData.GST_Rate || ''}
+                  onChange={handleNumberChange}
+                  className={`w-full px-3 py-2 border rounded-md border-gray-300`}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  name="saledate"
+                  value={formData.saledate}
+                  onChange={handleInputChange}
+                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Invoice No.
+                </label>
+                <input
+                  type="number"
+                  name="invoice"
+                  value={formData.invoice || ''}
+                  onChange={handleNumberChange}
+                  className={`w-full px-3 py-2 border rounded-md border-gray-300`}
+                />
+              </div>
+              <div className='flex'>
+                <label className="text-sm flex grow font-medium  text-gray-700 mb-1">
+                  Big HSN
+                </label>
+                <input
+                  type="checkbox"
+                  name="bighsn"
+                  checked={formData.bighsn}
+                  onChange={handleBooleanChange}
+                  className={`px-3 py-2 border rounded-md `}
+                />
+              </div>
+              <div className='flex'>
+                <label className="text-sm flex grow font-medium text-gray-700 mb-1">
+                  Is IGST
+                </label>
+                <input
+                  type="checkbox"
+                  name="isIGST"
+                  checked={formData.isIGST}
+                  onChange={handleBooleanChange}
+                  className={`px-3 py-2 border rounded-md `}
+                />
+              </div>
             </div>
-            
+
+
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Docs*
@@ -320,7 +426,7 @@ const TractorForm = () => {
               {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
             </div>
           </div>
-          
+
           {/* Sale Information */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Sale Information</h2>
@@ -338,7 +444,7 @@ const TractorForm = () => {
               {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}
             </div>
           </div>
-          
+
           {/* Cash Amounts */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Cash Payments</h2>
@@ -385,7 +491,7 @@ const TractorForm = () => {
               Add Cash Payment
             </button>
           </div>
-          
+
           {/* Online Amounts */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Online Payments</h2>
@@ -445,7 +551,7 @@ const TractorForm = () => {
               Add Online Payment
             </button>
           </div>
-          
+
           {/* Cheque Amounts */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Cheque Payments</h2>
@@ -505,7 +611,7 @@ const TractorForm = () => {
               Add Cheque Payment
             </button>
           </div>
-          
+
           {/* Loan Information */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Loan Information</h2>
@@ -548,21 +654,8 @@ const TractorForm = () => {
               </div>
             </div>
           </div>
-          
-          {/* Pending Amount */}
-          <div className="col-span-2 md:col-span-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Pending Amount
-            </label>
-            <input
-              type="number"
-              name="pendingamount"
-              value={formData.pendingamount || ''}
-              onChange={handleNumberChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          
+
+
           {/* Old Tractor Information */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Old Tractor Exchange Information</h2>
@@ -605,7 +698,7 @@ const TractorForm = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Registration and Insurance */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Registration and Insurance</h2>
@@ -661,7 +754,7 @@ const TractorForm = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-8 flex justify-end space-x-4">
           <button
             type="button"

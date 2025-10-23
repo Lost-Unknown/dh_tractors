@@ -5,20 +5,22 @@ export async function POST(request) {
   try {
     connectToDB()
     const body = await request.json();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
 
     const newTractor = new Tractor({
       bname: body.bname,
       fname: body.fname,
-      saledate: today,
+      saledate: body.saledate,
       model: body.model,
       chassis: body.chassis,
       engine: body.engine,
       mobile: body.mobile,
+      invoice : body.invoice,
       address: body.address,
       docs: body.docs,
+      GSTIN: body.GSTIN,
+      GST_rate:body.GST_Rate,
+      isIGST:body.isIGST,
+      bighsn:body.bighsn,
       saleamount: body.saleamount,
       cashamount: body.cashamount, // array of { amount, receivedate }
       onlineamount: body.onlineamount,

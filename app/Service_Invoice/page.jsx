@@ -1,10 +1,12 @@
 "use client"
 import Link from 'next/link';
-import { GlobalConfig } from '../app.config';
 import React, { useState } from 'react';
-const TractorForm = () => {
+const ServiceForm = () => {
 
-
+  const[totalData,setTotalData] = useState({
+    SpareTotal: 0,
+    JobsTotal: 0
+  })
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
     ownername: '',
@@ -13,55 +15,82 @@ const TractorForm = () => {
     engine: '',
     mobile: 0,
     hours: 0,
-    spares: [{ Code: '', hsn: '', name: '', MRP: 0, Final: 0 }],
-    jobs: [{ type: '', cost: '' }]
+    date:new Date(),
+    spares: [{ code: '', name: '',quantity:1, MRP: 0, final: 0 }],
+    jobs: [{ type: '', cost: 0 }]
   });
-
-  // Form validation state
-  const [errors, setErrors] = useState({});
 
   // Handle text input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: undefined });
-    }
   };
 
-  // Handle number input changes
-  const handleNumberChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
-
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: undefined });
+  // Validate Spare Parts
+  const validateParts = async(e) =>{
+    var partslist = '';
+    formData.spares.forEach(element => {
+      partslist = partslist + element.code+ '_';
+      });
+      const sub = partslist.substring(0,partslist.length -1);
+      try {
+      // Replace with your API endpoint
+      const response = await fetch(`/api/spare/${sub}`);
+      if(response.ok)
+      {
+        const sparedata = await response.json();
+        const updatedSpares = [...formData.spares]
+        let priceTotal  = 0;
+        for(let i = 0; i<updatedSpares.length;i++){
+          updatedSpares[i].name = sparedata[i].name;
+          updatedSpares[i].MRP = sparedata[i].price;
+          updatedSpares[i].final = sparedata[i].price;
+          priceTotal += sparedata[i].price;
+        }
+        setFormData({ ...formData, spares: updatedSpares });
+        setTotalData({...totalData,SpareTotal:priceTotal})
+      }
     }
-  };
+    catch(e){
+      console.log("Something Went Wrong" + e);  
+    }
+  }
 
   // Handle Spares array updates
   const handleSpareChange = (index, field, value) => {
     const updatedSpares = [...formData.spares];
-    if (field === 'Code') {
-      updatedSpares[index].Code = value;
-    } else if (field === 'Final') {
-      updatedSpares[index].Final = Number(value);
+    if (field === 'code') {
+      updatedSpares[index].code = value;
+    } else if (field === 'final') {
+      updatedSpares[index].final = Number(value);
+      let spareTotal = 0;
+      updatedSpares.forEach(element => {
+        spareTotal += element.final*element.quantity;
+      });
+      setTotalData({...totalData,SpareTotal:spareTotal})
+    }
+    else if (field === 'quantity') {
+      updatedSpares[index].quantity = Number(value);
+      let spareTotal = 0;
+      updatedSpares.forEach(element => {
+        spareTotal += element.final*element.quantity;
+      });
+      setTotalData({...totalData,SpareTotal:spareTotal})
     }
     setFormData({ ...formData, spares: updatedSpares });
+
+    console.log(formData.spares)
   };
 
-  // Add new cash amount entry
+  // Add new Spare entry
   const addSpares = () => {
     setFormData({
       ...formData,
-      spares: [...formData.spares, { Code: '', hsn: '', name: '', MRP: 0, Final: 0 }]
+      spares: [...formData.spares, { code: '', name: '',quantity:1, MRP: 0, final: 0 }]
     });
-    console.log(formData)
   };
 
+  // Handle Spare remove entry
   const removeSpare = (index) => {
     const updatedSpares = [...formData.spares];
     updatedSpares.splice(index, 1);
@@ -75,11 +104,16 @@ const TractorForm = () => {
       updatedJobs[index].type = value;
     } else if (field === 'cost') {
       updatedJobs[index].cost = Number(value);
+      let jobstotal = 0;
+      updatedJobs.forEach(element => {
+        jobstotal += element.cost;
+      });
+      setTotalData({...totalData,JobsTotal:jobstotal});
     }
     setFormData({ ...formData, jobs: updatedJobs });
   };
 
-  // Add new cash amount entry
+  // Add new jobs amount entry
   const addJobs = () => {
     setFormData({
       ...formData,
@@ -87,60 +121,30 @@ const TractorForm = () => {
     });
   };
 
+  // Handle Jobs remove entry
   const removeJobs = (index) => {
     const updatedJobs = [...formData.jobs];
     updatedJobs.splice(index, 1);
     setFormData({ ...formData, jobs: updatedJobs });
   };
-
-  // Validate form before submission
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Required string fields
-    if (!formData.bname) newErrors.bname = 'Buyer name is required';
-    if (!formData.fname) newErrors.fname = "Father's name is required";
-    if (!formData.model) newErrors.model = 'Model is required';
-    if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-    if (!formData.engine) newErrors.engine = 'Engine number is required';
-    if (!formData.address) newErrors.address = 'Address is required';
-
-    // Required number fields
-    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
-    if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
-
-    // Validate mobile number format
-    if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
-      newErrors.mobile = 'Please enter a valid mobile number';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
-  };
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return; // Stop submission if validation fails
-    }
     try {
       // Replace with your API endpoint
-      const response = await fetch('/api/tractors', {
+      const response = await fetch('/api/service', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      console.log(JSON.stringify(formData))
-
       if (response.ok) {
-        alert('Tractor data saved successfully!'); // Redirect to tractors list page
+        // if saved Successfully
+        alert('Service data saved successfully!');
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Failed to save tractor data'}`);
+        alert(`Error: ${errorData.message || 'Failed to save Service data'}`);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -148,11 +152,11 @@ const TractorForm = () => {
     }
   };
 
-
   return (
     <div className="w-full p-6 bg-white rounded-lg shadow-md">
       <div className='flex w-full justify-end'>
         <Link className='bg-blue-500 px-4 py-2 hover:bg-blue-700 text-white rounded-lg m-1' href={"/Service_Invoice/Add_Spares"}>Add Spare</Link>
+        <Link className='bg-blue-500 px-4 py-2 hover:bg-blue-700 text-white rounded-lg m-1' href={"/Service_Invoice/Invoice"}>Invoice</Link>
       </div>
       <h1 className="text-2xl font-bold mb-6">Generate Service Invoice</h1>
       <form onSubmit={handleSubmit}>
@@ -166,9 +170,8 @@ const TractorForm = () => {
               name="ownername"
               value={formData.ownername}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md ${errors.ownername ? 'border-red-500' : 'border-gray-300'}`}
+              className={'w-full px-3 py-2 border rounded-md border-gray-300'}
             />
-            {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.ownername}</p>}
           </div>
           <div className='w-1/2'>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -179,9 +182,8 @@ const TractorForm = () => {
               name="mobile"
               value={formData.mobile}
               onChange={handleInputChange}
-              className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+              className={'w-full px-3 py-2 border rounded-md border-gray-300'}
             />
-            {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
           </div>
         </div>
         <div className='flex gap-3'>
@@ -191,12 +193,11 @@ const TractorForm = () => {
           </label>
           <input
             type="text"
-            name="chasssis"
+            name="chassis"
             value={formData.chassis}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? 'border-red-500' : 'border-gray-300'}`}
+            className={'w-full px-3 py-2 border rounded-md border-gray-300'}
           />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
         </div>
         <div className='w-1/2'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -207,9 +208,8 @@ const TractorForm = () => {
             name="engine"
             value={formData.engine}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
+            className={'w-full px-3 py-2 border rounded-md border-gray-300'}
           />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
         </div>
         </div>
         <div className='flex gap-3'>
@@ -222,9 +222,8 @@ const TractorForm = () => {
             name="hours"
             value={formData.hours}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.hours ? 'border-red-500' : 'border-gray-300'}`}
+            className={'w-full px-3 py-2 border rounded-md border-gray-300'}
           />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.hours}</p>}
         </div>
         <div className='w-1/2'>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -235,9 +234,8 @@ const TractorForm = () => {
             name="model"
             value={formData.model}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+            className={'w-full px-3 py-2 border rounded-md border-gray-300'}
           />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.hours}</p>}
         </div>
         </div>
         <div>
@@ -246,12 +244,11 @@ const TractorForm = () => {
           </label>
           <input
             type="date"
-            name="invoice_date"
-            value={'2025-09-10'}
+            name="date"
+            value={formData.date}
             onChange={handleInputChange}
-            className={`w-full px-3 py-2 border rounded-md ${errors.invoice_date ? 'border-red-500' : 'border-gray-300'}`}
+            className={'w-full px-3 py-2 border rounded-md border-gray-300'}
           />
-          {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.invoice_date}</p>}
         </div>
 
         <hr className='my-2' />
@@ -267,19 +264,8 @@ const TractorForm = () => {
                 </label>
                 <input
                   type="text"
-                  value={spare.Code}
-                  onChange={(e) => handleSpareChange(index, 'Code', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div className="flex flex-col w-1/6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  HSN
-                </label>
-                <input
-                  type="text"
-                  value={spare.hsn}
-                  readOnly
+                  value={spare.code}
+                  onChange={(e) => handleSpareChange(index, 'code', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -296,6 +282,17 @@ const TractorForm = () => {
               </div>
               <div className="flex flex-col w-1/6">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Quantity
+                </label>
+                <input
+                  type="text"
+                  value={spare.quantity}
+                  onChange={(e) => handleSpareChange(index, 'quantity', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div className="flex flex-col w-1/6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
                   MRP
                 </label>
                 <input
@@ -307,12 +304,12 @@ const TractorForm = () => {
               </div>
               <div className="flex flex-col w-1/6">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Final
+                  final
                 </label>
                 <input
                   type="text"
-                  value={spare.Final}
-                  onChange={(e) => handleSpareChange(index, 'Final', e.target.value)}
+                  value={spare.final}
+                  onChange={(e) => handleSpareChange(index, 'final', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -327,7 +324,8 @@ const TractorForm = () => {
               )}
             </div>
           ))}
-          <div className='flex gap-2'>
+          <div className='flex justify-between'>
+            <div className='flex gap-2'>
             <button
               type="button"
               onClick={addSpares}
@@ -337,11 +335,13 @@ const TractorForm = () => {
             </button>
             <button
               type="button"
-              onClick={() => { }}
+              onClick={validateParts}
               className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-900"
             >
               Validate Spares
             </button>
+            </div>
+            {<h1 className='text-2xl'>Total : Rs {totalData.SpareTotal}</h1>}
           </div>
         </div>
         <hr className='my-2' />
@@ -383,6 +383,7 @@ const TractorForm = () => {
               )}
             </div>
           ))}
+          <div className='flex justify-between'>
           <button
             type="button"
             onClick={addJobs}
@@ -390,14 +391,16 @@ const TractorForm = () => {
           >
             Add Jobs
           </button>
+          <h1 className='text-2xl'>Total : Rs {totalData.JobsTotal}</h1>
+          </div>
         </div>
 
         <hr className='my-2' />
 
-        <div className='flex justify-end'>
+        <div className='flex justify-between'>
+          <h1 className='text-2xl font-bold'>Grand Total : Rs {totalData.SpareTotal + totalData.JobsTotal}</h1>
           <button
-            type="button"
-            onClick={() => { }}
+            type="submit"
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-900"
           >
             Generate Bill
@@ -408,4 +411,4 @@ const TractorForm = () => {
   );
 };
 
-export default TractorForm;
+export default ServiceForm;

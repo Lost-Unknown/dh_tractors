@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link';
 
-const Report = () => {
+const Spare_Report = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [rows, setRows] = useState([]);
@@ -31,30 +31,31 @@ const Report = () => {
 
   return (
     <div className='flex flex-col h-dvh'>
-      <div className='h-12 content-center flex w-full gap-3 px-3 py-2 bg-white'>
-        <label className='my-auto text-gray-900'>From</label>
-        <input
-          className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <label className='my-auto text-gray-900'>-</label>
-        <label className='my-auto text-gray-900'>To</label>
-        <input
-          className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-        <button 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
-          onClick={getreport}
-        >
-          Search
-        </button>
-      </div>
-
+        <div className=' py-2 bg-white content-center h-12 flex w-full gap-3 px-3 '>
+          <label className='my-auto text-gray-900'>From</label>
+          <input
+            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <label className='my-auto text-gray-900'>-</label>
+          <label className='my-auto text-gray-900'>To</label>
+          <input
+            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+            onClick={getreport}
+          >
+            Search
+          </button>
+          <div className='flex grow'></div>
+          <Link className=' text-white bg-blue-600 hover:bg-blue-900 py-1 px-6 rounded-md' href={"/Service_Invoice"}>New Spare</Link>
+        </div>
       <div className='bg-blue-50 h-full'>
         <div className="overflow-x-auto shadow-md rounded-lg">
           <table className="min-w-full bg-white">
@@ -99,11 +100,11 @@ const Report = () => {
                     {new Date(row.saledate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {row.docs ?<>
-                    <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`https://${row.docs}`}>
-                      Documents
-                    </Link>
-                    </>:<></>}
+                    {row.docs ? <>
+                      <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`https://${row.docs}`}>
+                        Documents
+                      </Link>
+                    </> : <></>}
                     <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`/BuyerDetails/Edit?id=${row._id}`}>
                       Edit
                     </Link>
@@ -128,4 +129,4 @@ const Report = () => {
   );
 };
 
-export default Report;
+export default Spare_Report;

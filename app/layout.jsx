@@ -1,9 +1,9 @@
 import "./globals.css";
-import NavBar from "@/Modules/NavBar";
+import NavBar from "@/Components/NavBar";
 import { Suspense } from "react";
 export const metadata = {
-  title: "Shri Salasar Tractors",
-  description: "Digital platform for Shri Salasar Tractors",
+  title: "DH Tractors",
+  description: "Digital platform for DH Tractors",
 };
 
 export default function RootLayout({ children }) {

@@ -15,6 +15,7 @@ const BuyerDetails = () => {
         model: "",
         chassis: "",
         engine: "",
+        GSTIN:"",
         saleamount: "",
         cashamount: [],
         chequeamount: [],
@@ -36,13 +37,26 @@ const BuyerDetails = () => {
         if (value === null || value === undefined) return false;
 
         const num = parseFloat(value);
-        return !isNaN(num) && num !== 0;
+        return !isNaN(num) && num >= 1;
     };
 
     useEffect(() => {
         const getDetails = async () => {
             const response = await fetch(`/api/details/${detailid}`)
             const data = await response.json();
+
+            let totalReceivedAmount = 0;
+            data.cashamount.forEach(element => {
+                totalReceivedAmount += element.amount;
+            });
+            data.chequeamount.forEach(element => {
+                totalReceivedAmount += element.amount;
+            });
+            data.onlineamount.forEach(element => {
+                totalReceivedAmount += element.amount;
+            });
+            totalReceivedAmount += data.oldtractorsaleamount + data.loanamount;
+            data.pendingamount = data.saleamount - totalReceivedAmount;
             setPost(data)
         }
 
@@ -66,6 +80,7 @@ const BuyerDetails = () => {
                 <p className='text-gray-900 w-1/2'><b>Chassis No. :  </b>{post.chassis}</p>
                 <p className='text-gray-900 w-1/2'><b>Engine No. :  </b>{post.engine}</p>
             </div>
+            <p className='text-gray-900'><b>GSTIN :  </b>{post.GSTIN}</p>
             <h1 className='text-white p-2 w-full bg-gray-900 mt-2 font-bold text-2xl'>Payment Details</h1>
             <p className='text-gray-900'><b>Sale Amount :  </b>Rs {post.saleamount}</p>
             {post.cashamount.length > 0 && post.cashamount[0].amount !== 0 && (

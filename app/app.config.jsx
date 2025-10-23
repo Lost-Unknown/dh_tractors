@@ -1,3 +1,6 @@
 export const GlobalConfig ={
-    DEMO : "This is a global variable , Sunnny",
+    serviceinvoice: 1,
+    spareinvoice:1,
+    saleinvoice:1,
+    stocktransferinvoice:1,
 }
