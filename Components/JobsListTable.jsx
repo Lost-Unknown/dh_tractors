@@ -81,7 +81,7 @@ const JobsListTable = ({ data  }) => {
     return (
         <table className="w-full border border-gray-400 text-xs text-center">
             <thead>
-                <tr className="bg-gray-100">
+                <tr className="">
                     <th className="border border-gray-400 w-min ">S. No.</th>
                     <th className="border border-gray-400 ">Desc. of Goods</th>
                     <th className="border border-gray-400 ">Taxable<br/> Value</th>
@@ -116,7 +116,7 @@ const JobsListTable = ({ data  }) => {
                     </tr>
                 ))}
                 {/* Parts Total Row */}
-                <tr className="font-semibold bg-gray-50">
+                <tr className="font-semibold">
                     <td colSpan={2} className="border border-gray-400  text-right pr-1">
                         Labour Total
                     </td>

@@ -220,8 +220,8 @@ const TractorForm = () => {
       if (response.ok) {
         const data = await response.json();
         setLastData({
-          lastSaleDate: data.saledate.toString("dd-mm-yyyy"),
-          lastInvoice: data.invoice || 0
+            lastSaleDate:  data.saledate.toString("dd-mm-yyyy"),
+          lastInvoice:  data.invoice || 0 
         });
         setFormData({ ...formData, invoice: lastData.lastInvoice +1 });
       }

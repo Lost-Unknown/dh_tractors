@@ -26,7 +26,6 @@ const Sale_Invoice = () => {
         bighsn:true,
         loanprovider:'',
         date: new Date(),
-        actualinvoice: '',
         actualdate: '',
     });
 
@@ -45,13 +44,6 @@ const Sale_Invoice = () => {
             (mm > 9 ? '' : '0') + mm,
             newdate.getFullYear()
             ].join('-');
-
-            //Setting Actual Invoice Number 
-            data.actualinvoice =  ['JHS',
-            newdate.getFullYear(),
-            (mm > 9 ? '' : '0') + mm,
-            (data.invoice > 9 ? '' : '0') + data.invoice,
-            ].join('');
 
             setPost(data)
         }
@@ -86,13 +78,13 @@ const Sale_Invoice = () => {
                             </div>
                             <div className='flex text-sm w-full'>
                                 <h1 className='w-5/12 font-bold'>Cust. GSTIN</h1>
-                                <h1 className='w-7/12'>: {post.GSTIN}</h1>
+                                <h1 className='w-7/12'>: {post.GST}</h1>
                             </div>
                         </div>
                         <div className='flex flex-col w-5/12'>
                             <div className='flex text-sm w-full'>
                                 <h1 className='w-5/12 font-bold'>Invoice No.</h1>
-                                <h1 className='w-7/12'>: {post.actualinvoice}</h1>
+                                <h1 className='w-7/12'>: {post.invoice}</h1>
                             </div>
                             <div className='flex text-sm w-full'>
                                 <h1 className='w-5/12 font-bold'>Invoice Date</h1>

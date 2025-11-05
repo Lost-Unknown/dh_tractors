@@ -97,7 +97,7 @@ const PartsListTable = ({ data ,spares }) => {
     return (
         <table className="w-full border border-gray-400 text-xs text-center">
             <thead>
-                <tr className="bg-gray-100">
+                <tr className="">
                     <th className="border border-gray-400 w-min ">S. No.</th>
                     <th className="border border-gray-400 ">Desc. of Goods</th>
                     <th className="border border-gray-400 ">HSN <br/> Code</th>
@@ -141,7 +141,7 @@ const PartsListTable = ({ data ,spares }) => {
                     </tr>
                 ))}
                 {/* Parts Total Row */}
-                <tr className="font-semibold bg-gray-50">
+                <tr className="font-semibold">
                     <td colSpan={3} className="border border-gray-400  text-right pr-1">
                         Parts Total
                     </td>

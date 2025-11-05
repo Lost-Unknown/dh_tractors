@@ -100,11 +100,7 @@ const Service_Invoice = () => {
             ].join('-');
 
             //Setting Actual Invoice Number 
-            data.actualinvoice =  ['JHS',
-            newdate.getFullYear(),
-            (mm > 9 ? '' : '0') + mm,
-            (data.invoice > 9 ? '' : '0') + data.invoice,
-            ].join('');
+            data.actualinvoice =  'S'+ (data.invoice<10 ? "0"+data.invoice: data.invoice);
             setPost(data)
 
         }
