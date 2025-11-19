@@ -1,5 +1,5 @@
+"use client";
 import React from "react";
-import Image from "next/image";
 
 const InvoiceHeader = () => {
   return (
@@ -7,7 +7,7 @@ const InvoiceHeader = () => {
       <div className="w-full flex relative">
         <img
           className=" absolute mt-4"
-          src="/swarajLogo.png"
+          src="/SwarajLogo.png"
           width={160}
           height={40}
           alt="Logo"
