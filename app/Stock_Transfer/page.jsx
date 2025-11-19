@@ -1,685 +1,171 @@
 "use client"
-import React, { useState } from 'react';
-const TractorForm = () => {
-  
-  // Initialize form state with empty values
-  const [formData, setFormData] = useState({
-    bname: '',
-    fname: '',
-    model: '',
-    chassis: '',
-    engine: '',
-    mobile: 0,
-    address: '',
-    docs:"",
-    saleamount: 0,
-    cashamount: [{ amount: 0, receivedate: new Date() }],
-    onlineamount: [{ amount: 0, transid: '', receivedate: new Date() }],
-    chequeamount: [{ amount: 0, chequeid: '', receivedate: new Date() }],
-    loanamount: 0,
-    loantranid: '',
-    loanprovider: '',
-    pendingamount: 0,
-    oldtractorname: '',
-    oldtractorsaleamount: 0,
-    oldSaleMediator: '',
-    regno: '',
-    insureno: '',
-    regamount: 0,
-    insureamount: 0
-  });
+import React, { useState } from 'react'
+import Link from 'next/link';
 
-  // Form validation state
-  const [errors, setErrors] = useState({});
+const Stock_Transfer = () => {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [count,setCount] = useState('');
+  const [rows, setRows] = useState([]);
 
-  // Handle text input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: undefined });
-    }
-  };
-
-  // Handle number input changes
-  const handleNumberChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
-    
-    // Clear error when field is edited
-    if (errors[name]) {
-      setErrors({ ...errors, [name]: undefined });
-    }
-  };
-
-  // Handle cash amount array updates
-  const handleCashAmountChange = (index, field, value) => {
-    const updatedCashAmounts = [...formData.cashamount];
-    if (field === 'amount') {
-      updatedCashAmounts[index].amount = Number(value);
-    } else if (field === 'receivedate') {
-      updatedCashAmounts[index].receivedate = new Date(value);
-    }
-    setFormData({ ...formData, cashamount: updatedCashAmounts });
-  };
-
-  // Add new cash amount entry
-  const addCashAmount = () => {
-    setFormData({
-      ...formData,
-      cashamount: [...formData.cashamount, { amount: 0, receivedate: new Date() }]
-    });
-  };
-
-  // Remove cash amount entry
-  const removeCashAmount = (index) => {
-    const updatedCashAmounts = [...formData.cashamount];
-    updatedCashAmounts.splice(index, 1);
-    setFormData({ ...formData, cashamount: updatedCashAmounts });
-  };
-
-  // Handle online amount array updates
-  const handleOnlineAmountChange = (index, field, value) => {
-    const updatedOnlineAmounts = [...formData.onlineamount];
-    if (field === 'amount') {
-      updatedOnlineAmounts[index].amount = Number(value);
-    } else if (field === 'transid') {
-      updatedOnlineAmounts[index].transid = value;
-    } else if (field === 'receivedate') {
-      updatedOnlineAmounts[index].receivedate = new Date(value);
-    }
-    setFormData({ ...formData, onlineamount: updatedOnlineAmounts });
-  };
-
-  // Add new online amount entry
-  const addOnlineAmount = () => {
-    setFormData({
-      ...formData,
-      onlineamount: [...formData.onlineamount, { amount: 0, transid: '', receivedate: new Date() }]
-    });
-  };
-
-  // Remove online amount entry
-  const removeOnlineAmount = (index) => {
-    const updatedOnlineAmounts = [...formData.onlineamount];
-    updatedOnlineAmounts.splice(index, 1);
-    setFormData({ ...formData, onlineamount: updatedOnlineAmounts });
-  };
-
-  // Handle cheque amount array updates
-  const handleChequeAmountChange = (index, field, value) => {
-    const updatedChequeAmounts = [...formData.chequeamount];
-    if (field === 'amount') {
-      updatedChequeAmounts[index].amount = Number(value);
-    } else if (field === 'chequeid') {
-      updatedChequeAmounts[index].chequeid = value;
-    } else if (field === 'receivedate') {
-      updatedChequeAmounts[index].receivedate = new Date(value);
-    }
-    setFormData({ ...formData, chequeamount: updatedChequeAmounts });
-  };
-
-  // Add new cheque amount entry
-  const addChequeAmount = () => {
-    setFormData({
-      ...formData,
-      chequeamount: [...formData.chequeamount, { amount: 0, chequeid: '', receivedate: new Date() }]
-    });
-  };
-
-  // Remove cheque amount entry
-  const removeChequeAmount = (index) => {
-    const updatedChequeAmounts = [...formData.chequeamount];
-    updatedChequeAmounts.splice(index, 1);
-    setFormData({ ...formData, chequeamount: updatedChequeAmounts });
-  };
-
-  // Validate form before submission
-  const validateForm = () => {
-    const newErrors = {};
-    
-    // Required string fields
-    if (!formData.bname) newErrors.bname = 'Buyer name is required';
-    if (!formData.fname) newErrors.fname = "Father's name is required";
-    if (!formData.model) newErrors.model = 'Model is required';
-    if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-    if (!formData.engine) newErrors.engine = 'Engine number is required';
-    if (!formData.address) newErrors.address = 'Address is required';
-    
-    // Required number fields
-    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
-    if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
-    
-    // Validate mobile number format
-    if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
-      newErrors.mobile = 'Please enter a valid mobile number';
+  const getreport = async () => {
+    if (!startDate || !endDate) {
+      alert("Please select both start and end dates.");
+      return;
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Return true if no errors
+    // try {
+    //   const Range = `${startDate}=${endDate}`;
+    //   const response = await fetch(`/api/tractors/${Range}`);
+    //   if (response.ok) {
+    //     const tractors = await response.json()
+    //     console.log("Success")
+    //     setRows(tractors); // Assuming response is like { success: true, data: [...] }
+    //   } else {
+    //     alert("Failed to fetch data.");
+    //   }
+    // } catch (error) {
+    //   console.error("Fetch error:", error);
+    //   alert("Error fetching report.");
+    // }
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return; // Stop submission if validation fails
+  const getreportforcount = async () => {
+    if (!count) {
+      alert("Count cannot be Zero!");
+      return;
     }
+
     try {
-      // Replace with your API endpoint
-      const response = await fetch('/api/tractors', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      console.log(JSON.stringify(formData))
-      
+      const response = await fetch(`/api/stocktransfercount/${count}`);
       if (response.ok) {
-        alert('Tractor data saved successfully!'); // Redirect to tractors list page
+        const tractors = await response.json()
+        console.log("Success")
+        setRows(tractors); // Assuming response is like { success: true, data: [...] }
       } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Failed to save tractor data'}`);
+        alert("Failed to fetch data.");
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred while saving the data. Please try again.');
+      console.error("Fetch error:", error);
+      alert("Error fetching report.");
     }
-  };
-
-  // Format date for input field
-  const formatDateForInput = (date) => {
-    return date instanceof Date 
-      ? date.toISOString().split('T')[0] 
-      : new Date().toISOString().split('T')[0];
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">New Tractor Entry</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Basic Information */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Basic Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Buyer Name*
-                </label>
-                <input
-                  type="text"
-                  name="bname"
-                  value={formData.bname}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.bname}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Father's Name*
-                </label>
-                <input
-                  type="text"
-                  name="fname"
-                  value={formData.fname}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.fname ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.fname && <p className="text-red-500 text-xs mt-1">{errors.fname}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Model*
-                </label>
-                <input
-                  type="text"
-                  name="model"
-                  value={formData.model}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.model && <p className="text-red-500 text-xs mt-1">{errors.model}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Chassis Number*
-                </label>
-                <input
-                  type="text"
-                  name="chassis"
-                  value={formData.chassis}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.chassis && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Engine Number*
-                </label>
-                <input
-                  type="text"
-                  name="engine"
-                  value={formData.engine}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Mobile Number*
-                </label>
-                <input
-                  type="number"
-                  name="mobile"
-                  value={formData.mobile || ''}
-                  onChange={handleNumberChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
-                />
-                {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
-              </div>
-            </div>
-            
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Docs*
-              </label>
-              <input
-                name="docs"
-                value={formData.docs}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.docs && <p className="text-red-500 text-xs mt-1">{errors.docs}</p>}
-            </div>
-
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Address*
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                rows={3}
-                className={`w-full px-3 py-2 border rounded-md ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
-            </div>
-          </div>
-          
-          {/* Sale Information */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Sale Information</h2>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Sale Amount*
-              </label>
-              <input
-                type="number"
-                name="saleamount"
-                value={formData.saleamount || ''}
-                onChange={handleNumberChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? 'border-red-500' : 'border-gray-300'}`}
-              />
-              {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}
-            </div>
-          </div>
-          
-          {/* Cash Amounts */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Cash Payments</h2>
-            {formData.cashamount.map((cash, index) => (
-              <div key={`cash-${index}`} className="flex items-end gap-4 mb-4">
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Amount
-                  </label>
-                  <input
-                    type="number"
-                    value={cash.amount || ''}
-                    onChange={(e) => handleCashAmountChange(index, 'amount', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex-grow">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Receive Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formatDateForInput(cash.receivedate)}
-                    onChange={(e) => handleCashAmountChange(index, 'receivedate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                {index > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => removeCashAmount(index)}
-                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addCashAmount}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Add Cash Payment
-            </button>
-          </div>
-          
-          {/* Online Amounts */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Online Payments</h2>
-            {formData.onlineamount.map((online, index) => (
-              <div key={`online-${index}`} className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Amount
-                  </label>
-                  <input
-                    type="number"
-                    value={online.amount || ''}
-                    onChange={(e) => handleOnlineAmountChange(index, 'amount', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Transaction ID
-                  </label>
-                  <input
-                    type="text"
-                    value={online.transid}
-                    onChange={(e) => handleOnlineAmountChange(index, 'transid', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex items-end gap-2">
-                  <div className="flex-grow">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Receive Date
-                    </label>
-                    <input
-                      type="date"
-                      value={formatDateForInput(online.receivedate)}
-                      onChange={(e) => handleOnlineAmountChange(index, 'receivedate', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => removeOnlineAmount(index)}
-                      className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addOnlineAmount}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Add Online Payment
-            </button>
-          </div>
-          
-          {/* Cheque Amounts */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Cheque Payments</h2>
-            {formData.chequeamount.map((cheque, index) => (
-              <div key={`cheque-${index}`} className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Amount
-                  </label>
-                  <input
-                    type="number"
-                    value={cheque.amount || ''}
-                    onChange={(e) => handleChequeAmountChange(index, 'amount', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Cheque ID
-                  </label>
-                  <input
-                    type="text"
-                    value={cheque.chequeid}
-                    onChange={(e) => handleChequeAmountChange(index, 'chequeid', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                <div className="flex items-end gap-2">
-                  <div className="flex-grow">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Receive Date
-                    </label>
-                    <input
-                      type="date"
-                      value={formatDateForInput(cheque.receivedate)}
-                      onChange={(e) => handleChequeAmountChange(index, 'receivedate', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    />
-                  </div>
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => removeChequeAmount(index)}
-                      className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addChequeAmount}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Add Cheque Payment
-            </button>
-          </div>
-          
-          {/* Loan Information */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Loan Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Loan Amount
-                </label>
-                <input
-                  type="number"
-                  name="loanamount"
-                  value={formData.loanamount || ''}
-                  onChange={handleNumberChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Loan Transaction ID
-                </label>
-                <input
-                  type="text"
-                  name="loantranid"
-                  value={formData.loantranid}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Loan Provider
-                </label>
-                <input
-                  type="text"
-                  name="loanprovider"
-                  value={formData.loanprovider}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* Pending Amount */}
-          <div className="col-span-2 md:col-span-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Pending Amount
-            </label>
-            <input
-              type="number"
-              name="pendingamount"
-              value={formData.pendingamount || ''}
-              onChange={handleNumberChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          
-          {/* Old Tractor Information */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Old Tractor Exchange Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Old Tractor Name
-                </label>
-                <input
-                  type="text"
-                  name="oldtractorname"
-                  value={formData.oldtractorname}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Old Tractor Sale Amount
-                </label>
-                <input
-                  type="number"
-                  name="oldtractorsaleamount"
-                  value={formData.oldtractorsaleamount}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Old Sale Mediator
-                </label>
-                <input
-                  type="text"
-                  name="oldSaleMediator"
-                  value={formData.oldSaleMediator}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* Registration and Insurance */}
-          <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Registration and Insurance</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Registration Number
-                </label>
-                <input
-                  type="text"
-                  name="regno"
-                  value={formData.regno}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Insurance Number
-                </label>
-                <input
-                  type="text"
-                  name="insureno"
-                  value={formData.insureno}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Registration Amount
-                </label>
-                <input
-                  type="number"
-                  name="regamount"
-                  value={formData.regamount || ''}
-                  onChange={handleNumberChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Insurance Amount
-                </label>
-                <input
-                  type="number"
-                  name="insureamount"
-                  value={formData.insureamount || ''}
-                  onChange={handleNumberChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="mt-8 flex justify-end space-x-4">
+    <div className='flex flex-col h-dvh'>
+        <div className=' py-2 bg-white content-center h-12 flex w-full gap-3 px-3 '>
+          <label className='my-auto text-gray-900'>From</label>
+          <input
+            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <label className='my-auto text-gray-900'>-</label>
+          <label className='my-auto text-gray-900'>To</label>
+          <input
+            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
           <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+            onClick={getreport}
           >
-            Cancel
+            Search
           </button>
+          <div className=' border-r-1'></div>
+          <label className='my-auto text-gray-900'>Count :</label>
+          <input
+            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
+            type="number"
+            value={count}
+            onChange={(e) => setCount(e.target.value)}
+          />
           <button
-            type="submit"
-            className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+            onClick={getreportforcount}
           >
-            Save Tractor
+            Search
           </button>
+          <div className='flex grow'></div>
+          <Link className=' text-white bg-blue-600 hover:bg-blue-900 py-1 px-6 rounded-md' href={"/Stock_Transfer/New_Transfer"}>New Sale</Link>
         </div>
-      </form>
+      <div className='bg-blue-50 h-full'>
+        <div className="overflow-x-auto shadow-md rounded-lg">
+          <table className="min-w-full bg-white">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Father's Name
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Mobile No.
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Model
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Sale Date
+                </th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {rows.map((row) => (
+                <tr key={row._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {row.bname}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {row.fname}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {row.mobile}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {row.model}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {new Date(row.saledate).toLocaleDateString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {row.docs ? <>
+                      <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`https://${row.docs}`}>
+                        Documents
+                      </Link>
+                    </> : <></>}
+                    <Link className="text-blue-600 hover:text-blue-900" href={`/Stock_Transfer/Invoice/?id=${row._id}`}>
+                      Invoice
+                    </Link>
+                    <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`/BuyerDetails/Edit?id=${row._id}`}>
+                      Edit
+                    </Link>
+                    <Link className="text-blue-600 hover:text-blue-900" href={`/BuyerDetails/?id=${row._id}`}>
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+              {rows.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
+                    No data available
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default TractorForm;
+export default Stock_Transfer;

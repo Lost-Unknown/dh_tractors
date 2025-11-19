@@ -437,7 +437,6 @@ const Buyer_Edit = () => {
                 name="saleamount"
                 value={formData.saleamount || ''}
                 onChange={handleNumberChange}
-                readOnly
                 className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? 'border-red-500' : 'border-gray-300'}`}
               />
               {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}

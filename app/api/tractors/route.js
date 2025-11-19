@@ -69,6 +69,7 @@ export async function PATCH(request) {
     
     const newTractor = {
       docs: body.docs,
+      saleamount: body.saleamount,
       cashamount: processArray(body.cashamount),
       onlineamount: processArray(body.onlineamount),
       chequeamount: processArray(body.chequeamount),
