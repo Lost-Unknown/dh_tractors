@@ -1,23 +1,23 @@
-"use client"
-import React from 'react'
-import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+"use client";
+import React from "react";
+import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Buyer_Edit = () => {
   const router = useRouter();
-  const searchParams = useSearchParams()
-  const detailid = searchParams.get("id")
+  const searchParams = useSearchParams();
+  const detailid = searchParams.get("id");
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
-    saleid: '',
-    bname: '',
-    fname: '',
-    model: '',
-    chassis: '',
-    engine: '',
+    saleid: "",
+    bname: "",
+    fname: "",
+    model: "",
+    chassis: "",
+    engine: "",
     mobile: 0,
-    address: '',
+    address: "",
     docs: "",
     GSTIN: "",
     isIGST: false,
@@ -25,18 +25,19 @@ const Buyer_Edit = () => {
     bighsn: true,
     saleamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
-    onlineamount: [{ amount: 0, transid: '', receivedate: new Date() }],
-    chequeamount: [{ amount: 0, chequeid: '', receivedate: new Date() }],
+    onlineamount: [{ amount: 0, transid: "", receivedate: new Date() }],
+    chequeamount: [{ amount: 0, chequeid: "", receivedate: new Date() }],
     loanamount: 0,
-    loantranid: '',
-    loanprovider: '',
-    oldtractorname: '',
+    loantranid: "",
+    loanprovider: "",
+    oldtractorname: "",
     oldtractorsaleamount: 0,
-    oldSaleMediator: '',
-    regno: '',
-    insureno: '',
+    oldtractorpurchaseamount: 0,
+    oldSaleMediator: "",
+    regno: "",
+    insureno: "",
     regamount: 0,
-    insureamount: 0
+    insureamount: 0,
   });
 
   useEffect(() => {
@@ -46,25 +47,33 @@ const Buyer_Edit = () => {
 
       // Process dates before setting state
       if (data.cashamount && Array.isArray(data.cashamount)) {
-        data.cashamount = data.cashamount.map(item => ({
+        data.cashamount = data.cashamount.map((item) => ({
           ...item,
-          receivedate: item.receivedate ? new Date(item.receivedate) : new Date()
+          receivedate: item.receivedate
+            ? new Date(item.receivedate)
+            : new Date(),
         }));
       }
 
       if (data.onlineamount && Array.isArray(data.onlineamount)) {
-        data.onlineamount = data.onlineamount.map(item => ({
+        data.onlineamount = data.onlineamount.map((item) => ({
           ...item,
-          receivedate: item.receivedate ? new Date(item.receivedate) : new Date()
+          receivedate: item.receivedate
+            ? new Date(item.receivedate)
+            : new Date(),
         }));
       }
 
       if (data.chequeamount && Array.isArray(data.chequeamount)) {
-        data.chequeamount = data.chequeamount.map(item => ({
+        data.chequeamount = data.chequeamount.map((item) => ({
           ...item,
-          receivedate: item.receivedate ? new Date(item.receivedate) : new Date()
+          receivedate: item.receivedate
+            ? new Date(item.receivedate)
+            : new Date(),
         }));
       }
+      if (data.oldtractorpurchaseamount == undefined)
+        data.oldtractorpurchaseamount = 0;
 
       setFormData(data);
     };
@@ -89,13 +98,13 @@ const Buyer_Edit = () => {
   // Handle boolean input changes
   const handleBooleanChange = (e) => {
     const { name, checked } = e.target;
-    setFormData({ ...formData, [name]: checked});
+    setFormData({ ...formData, [name]: checked });
   };
 
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
+    setFormData({ ...formData, [name]: value === "" ? null : Number(value) });
 
     // Clear error when field is edited
     if (errors[name]) {
@@ -106,9 +115,9 @@ const Buyer_Edit = () => {
   // Handle cash amount array updates
   const handleCashAmountChange = (index, field, value) => {
     const updatedCashAmounts = [...formData.cashamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedCashAmounts[index].amount = Number(value);
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedCashAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, cashamount: updatedCashAmounts });
@@ -118,7 +127,10 @@ const Buyer_Edit = () => {
   const addCashAmount = () => {
     setFormData({
       ...formData,
-      cashamount: [...formData.cashamount, { amount: 0, receivedate: new Date() }]
+      cashamount: [
+        ...formData.cashamount,
+        { amount: 0, receivedate: new Date() },
+      ],
     });
   };
 
@@ -132,11 +144,11 @@ const Buyer_Edit = () => {
   // Handle online amount array updates
   const handleOnlineAmountChange = (index, field, value) => {
     const updatedOnlineAmounts = [...formData.onlineamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedOnlineAmounts[index].amount = Number(value);
-    } else if (field === 'transid') {
+    } else if (field === "transid") {
       updatedOnlineAmounts[index].transid = value;
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedOnlineAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, onlineamount: updatedOnlineAmounts });
@@ -146,7 +158,10 @@ const Buyer_Edit = () => {
   const addOnlineAmount = () => {
     setFormData({
       ...formData,
-      onlineamount: [...formData.onlineamount, { amount: 0, transid: '', receivedate: new Date() }]
+      onlineamount: [
+        ...formData.onlineamount,
+        { amount: 0, transid: "", receivedate: new Date() },
+      ],
     });
   };
 
@@ -160,11 +175,11 @@ const Buyer_Edit = () => {
   // Handle cheque amount array updates
   const handleChequeAmountChange = (index, field, value) => {
     const updatedChequeAmounts = [...formData.chequeamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedChequeAmounts[index].amount = Number(value);
-    } else if (field === 'chequeid') {
+    } else if (field === "chequeid") {
       updatedChequeAmounts[index].chequeid = value;
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedChequeAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, chequeamount: updatedChequeAmounts });
@@ -174,7 +189,10 @@ const Buyer_Edit = () => {
   const addChequeAmount = () => {
     setFormData({
       ...formData,
-      chequeamount: [...formData.chequeamount, { amount: 0, chequeid: '', receivedate: new Date() }]
+      chequeamount: [
+        ...formData.chequeamount,
+        { amount: 0, chequeid: "", receivedate: new Date() },
+      ],
     });
   };
 
@@ -190,20 +208,24 @@ const Buyer_Edit = () => {
     const newErrors = {};
 
     // Required string fields
-    if (!formData.bname) newErrors.bname = 'Buyer name is required';
+    if (!formData.bname) newErrors.bname = "Buyer name is required";
     if (!formData.fname) newErrors.fname = "Father's name is required";
-    if (!formData.model) newErrors.model = 'Model is required';
-    if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-    if (!formData.engine) newErrors.engine = 'Engine number is required';
-    if (!formData.address) newErrors.address = 'Address is required';
+    if (!formData.model) newErrors.model = "Model is required";
+    if (!formData.chassis) newErrors.chassis = "Chassis number is required";
+    if (!formData.engine) newErrors.engine = "Engine number is required";
+    if (!formData.address) newErrors.address = "Address is required";
 
     // Required number fields
-    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
-    if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
+    if (!formData.mobile) newErrors.mobile = "Mobile number is required";
+    if (!formData.saleamount) newErrors.saleamount = "Sale amount is required";
 
     // Validate mobile number format
-    if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
-      newErrors.mobile = 'Please enter a valid mobile number';
+    if (
+      formData.mobile &&
+      (String(formData.mobile).length < 10 ||
+        String(formData.mobile).length > 12)
+    ) {
+      newErrors.mobile = "Please enter a valid mobile number";
     }
 
     setErrors(newErrors);
@@ -219,33 +241,33 @@ const Buyer_Edit = () => {
     }
     try {
       // Replace with your API endpoint
-      setFormData({ ...formData, saleid: detailid })
-      const response = await fetch('/api/tractors', {
-        method: 'PATCH',
+      setFormData({ ...formData, saleid: detailid });
+      const response = await fetch("/api/tractors", {
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        router.push(`/BuyerDetails?id=${detailid}`)
+        router.push(`/BuyerDetails?id=${detailid}`);
         // Redirect to tractors list page
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Failed to save tractor data'}`);
+        alert(`Error: ${errorData.message || "Failed to save tractor data"}`);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred while saving the data. Please try again.');
+      console.error("Error submitting form:", error);
+      alert("An error occurred while saving the data. Please try again.");
     }
   };
 
   // Format date for input field
   const formatDateForInput = (date) => {
     return date instanceof Date
-      ? date.toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0];
+      ? date.toISOString().split("T")[0]
+      : new Date().toISOString().split("T")[0];
   };
 
   return (
@@ -267,9 +289,11 @@ const Buyer_Edit = () => {
                   value={formData.bname}
                   onChange={handleInputChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.bname}</p>}
+                {errors.bname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.bname}</p>
+                )}
               </div>
 
               <div>
@@ -282,9 +306,11 @@ const Buyer_Edit = () => {
                   value={formData.fname}
                   onChange={handleInputChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.fname ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.fname ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.fname && <p className="text-red-500 text-xs mt-1">{errors.fname}</p>}
+                {errors.fname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.fname}</p>
+                )}
               </div>
 
               <div>
@@ -297,9 +323,11 @@ const Buyer_Edit = () => {
                   value={formData.model}
                   onChange={handleInputChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.model && <p className="text-red-500 text-xs mt-1">{errors.model}</p>}
+                {errors.model && (
+                  <p className="text-red-500 text-xs mt-1">{errors.model}</p>
+                )}
               </div>
 
               <div>
@@ -312,9 +340,11 @@ const Buyer_Edit = () => {
                   value={formData.chassis}
                   onChange={handleInputChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.chassis && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
+                {errors.chassis && (
+                  <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>
+                )}
               </div>
 
               <div>
@@ -327,9 +357,11 @@ const Buyer_Edit = () => {
                   value={formData.engine}
                   onChange={handleInputChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
+                {errors.engine && (
+                  <p className="text-red-500 text-xs mt-1">{errors.engine}</p>
+                )}
               </div>
 
               <div>
@@ -339,12 +371,14 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="mobile"
-                  value={formData.mobile || ''}
+                  value={formData.mobile || ""}
                   onChange={handleNumberChange}
                   readOnly
-                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
+                {errors.mobile && (
+                  <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -355,10 +389,10 @@ const Buyer_Edit = () => {
                   name="GSTIN"
                   value={formData.GSTIN.GSTIN}
                   onChange={handleInputChange}
-                  className={'w-full px-3 py-2 border rounded-md'}
+                  className={"w-full px-3 py-2 border rounded-md"}
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   GST Rate
@@ -366,12 +400,12 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="GST_Rate"
-                  value={formData.GST_Rate || ''}
+                  value={formData.GST_Rate || ""}
                   onChange={handleNumberChange}
                   className={`w-full px-3 py-2 border rounded-md `}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium  text-gray-700 mb-1">
                   Big HSN
                 </label>
@@ -383,7 +417,7 @@ const Buyer_Edit = () => {
                   className={`px-3 py-2 border rounded-md `}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium text-gray-700 mb-1">
                   Is IGST
                 </label>
@@ -407,9 +441,11 @@ const Buyer_Edit = () => {
                 onChange={handleInputChange}
                 rows={3}
                 readOnly
-                className={`w-full px-3 py-2 border rounded-md ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.address ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+              {errors.address && (
+                <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              )}
             </div>
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -419,9 +455,11 @@ const Buyer_Edit = () => {
                 name="docs"
                 value={formData.docs}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.docs && <p className="text-red-500 text-xs mt-1">{errors.docs}</p>}
+              {errors.docs && (
+                <p className="text-red-500 text-xs mt-1">{errors.docs}</p>
+              )}
             </div>
           </div>
 
@@ -435,11 +473,13 @@ const Buyer_Edit = () => {
               <input
                 type="number"
                 name="saleamount"
-                value={formData.saleamount || ''}
+                value={formData.saleamount || ""}
                 onChange={handleNumberChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}
+              {errors.saleamount && (
+                <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>
+              )}
             </div>
           </div>
 
@@ -454,8 +494,10 @@ const Buyer_Edit = () => {
                   </label>
                   <input
                     type="number"
-                    value={cash.amount || ''}
-                    onChange={(e) => handleCashAmountChange(index, 'amount', e.target.value)}
+                    value={cash.amount || ""}
+                    onChange={(e) =>
+                      handleCashAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -466,7 +508,13 @@ const Buyer_Edit = () => {
                   <input
                     type="date"
                     value={formatDateForInput(cash.receivedate)}
-                    onChange={(e) => handleCashAmountChange(index, 'receivedate', e.target.value)}
+                    onChange={(e) =>
+                      handleCashAmountChange(
+                        index,
+                        "receivedate",
+                        e.target.value,
+                      )
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -494,15 +542,20 @@ const Buyer_Edit = () => {
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Online Payments</h2>
             {formData.onlineamount.map((online, index) => (
-              <div key={`online-${index}`} className="grid grid-cols-3 gap-4 mb-4">
+              <div
+                key={`online-${index}`}
+                className="grid grid-cols-3 gap-4 mb-4"
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
                   <input
                     type="number"
-                    value={online.amount || ''}
-                    onChange={(e) => handleOnlineAmountChange(index, 'amount', e.target.value)}
+                    value={online.amount || ""}
+                    onChange={(e) =>
+                      handleOnlineAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -513,7 +566,9 @@ const Buyer_Edit = () => {
                   <input
                     type="text"
                     value={online.transid}
-                    onChange={(e) => handleOnlineAmountChange(index, 'transid', e.target.value)}
+                    onChange={(e) =>
+                      handleOnlineAmountChange(index, "transid", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -525,7 +580,13 @@ const Buyer_Edit = () => {
                     <input
                       type="date"
                       value={formatDateForInput(online.receivedate)}
-                      onChange={(e) => handleOnlineAmountChange(index, 'receivedate', e.target.value)}
+                      onChange={(e) =>
+                        handleOnlineAmountChange(
+                          index,
+                          "receivedate",
+                          e.target.value,
+                        )
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -554,15 +615,20 @@ const Buyer_Edit = () => {
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Cheque Payments</h2>
             {formData.chequeamount.map((cheque, index) => (
-              <div key={`cheque-${index}`} className="grid grid-cols-3 gap-4 mb-4">
+              <div
+                key={`cheque-${index}`}
+                className="grid grid-cols-3 gap-4 mb-4"
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
                   <input
                     type="number"
-                    value={cheque.amount || ''}
-                    onChange={(e) => handleChequeAmountChange(index, 'amount', e.target.value)}
+                    value={cheque.amount || ""}
+                    onChange={(e) =>
+                      handleChequeAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -573,7 +639,13 @@ const Buyer_Edit = () => {
                   <input
                     type="text"
                     value={cheque.chequeid}
-                    onChange={(e) => handleChequeAmountChange(index, 'chequeid', e.target.value)}
+                    onChange={(e) =>
+                      handleChequeAmountChange(
+                        index,
+                        "chequeid",
+                        e.target.value,
+                      )
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -585,7 +657,13 @@ const Buyer_Edit = () => {
                     <input
                       type="date"
                       value={formatDateForInput(cheque.receivedate)}
-                      onChange={(e) => handleChequeAmountChange(index, 'receivedate', e.target.value)}
+                      onChange={(e) =>
+                        handleChequeAmountChange(
+                          index,
+                          "receivedate",
+                          e.target.value,
+                        )
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -621,7 +699,7 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="loanamount"
-                  value={formData.loanamount || ''}
+                  value={formData.loanamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -655,18 +733,31 @@ const Buyer_Edit = () => {
 
           {/* Old Tractor Information */}
           <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Old Tractor Exchange Information</h2>
+            <h2 className="text-xl font-semibold mb-3">
+              Old Tractor Exchange Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Old Tractor Name
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   name="oldtractorname"
                   value={formData.oldtractorname}
                   onChange={handleInputChange}
-                  readOnly
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Old Tractor Purchase Amount
+                </label>
+                <input
+                  type="number"
+                  name="oldtractorpurchaseamount"
+                  value={formData.oldtractorpurchaseamount}
+                  onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -678,8 +769,7 @@ const Buyer_Edit = () => {
                   type="text"
                   name="oldtractorsaleamount"
                   value={formData.oldtractorsaleamount}
-                  onChange={handleInputChange}
-                  readOnly
+                  onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -692,7 +782,6 @@ const Buyer_Edit = () => {
                   name="oldSaleMediator"
                   value={formData.oldSaleMediator}
                   onChange={handleInputChange}
-                  readOnly
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -701,7 +790,9 @@ const Buyer_Edit = () => {
 
           {/* Registration and Insurance */}
           <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Registration and Insurance</h2>
+            <h2 className="text-xl font-semibold mb-3">
+              Registration and Insurance
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -734,7 +825,7 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="regamount"
-                  value={formData.regamount || ''}
+                  value={formData.regamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -746,7 +837,7 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="insureamount"
-                  value={formData.insureamount || ''}
+                  value={formData.insureamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -772,7 +863,7 @@ const Buyer_Edit = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Buyer_Edit
+export default Buyer_Edit;

@@ -1,16 +1,15 @@
-"use client"
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 const TractorForm = () => {
-
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
-    bname: '',
-    fname: '',
-    model: '',
-    chassis: '',
-    engine: '',
+    bname: "",
+    fname: "",
+    model: "",
+    chassis: "",
+    engine: "",
     mobile: 0,
-    address: '',
+    address: "",
     docs: "",
     GSTIN: "",
     invoice: 0,
@@ -20,23 +19,24 @@ const TractorForm = () => {
     bighsn: true,
     saleamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
-    onlineamount: [{ amount: 0, transid: '', receivedate: new Date() }],
-    chequeamount: [{ amount: 0, chequeid: '', receivedate: new Date() }],
+    onlineamount: [{ amount: 0, transid: "", receivedate: new Date() }],
+    chequeamount: [{ amount: 0, chequeid: "", receivedate: new Date() }],
     loanamount: 0,
-    loantranid: '',
-    loanprovider: '',
-    oldtractorname: '',
+    loantranid: "",
+    loanprovider: "",
+    oldtractorname: "",
     oldtractorsaleamount: 0,
-    oldSaleMediator: '',
-    regno: '',
-    insureno: '',
+    oldtractorpurchaseamount: 0,
+    oldSaleMediator: "",
+    regno: "",
+    insureno: "",
     regamount: 0,
-    insureamount: 0
+    insureamount: 0,
   });
 
   const [lastData, setLastData] = useState({
     lastInvoice: 0,
-    lastSaleDate: ""
+    lastSaleDate: "",
   });
 
   // Form validation state
@@ -56,7 +56,7 @@ const TractorForm = () => {
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
+    setFormData({ ...formData, [name]: value === "" ? null : Number(value) });
 
     // Clear error when field is edited
     if (errors[name]) {
@@ -73,9 +73,9 @@ const TractorForm = () => {
   // Handle cash amount array updates
   const handleCashAmountChange = (index, field, value) => {
     const updatedCashAmounts = [...formData.cashamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedCashAmounts[index].amount = Number(value);
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedCashAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, cashamount: updatedCashAmounts });
@@ -85,7 +85,10 @@ const TractorForm = () => {
   const addCashAmount = () => {
     setFormData({
       ...formData,
-      cashamount: [...formData.cashamount, { amount: 0, receivedate: new Date() }]
+      cashamount: [
+        ...formData.cashamount,
+        { amount: 0, receivedate: new Date() },
+      ],
     });
   };
 
@@ -99,11 +102,11 @@ const TractorForm = () => {
   // Handle online amount array updates
   const handleOnlineAmountChange = (index, field, value) => {
     const updatedOnlineAmounts = [...formData.onlineamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedOnlineAmounts[index].amount = Number(value);
-    } else if (field === 'transid') {
+    } else if (field === "transid") {
       updatedOnlineAmounts[index].transid = value;
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedOnlineAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, onlineamount: updatedOnlineAmounts });
@@ -113,7 +116,10 @@ const TractorForm = () => {
   const addOnlineAmount = () => {
     setFormData({
       ...formData,
-      onlineamount: [...formData.onlineamount, { amount: 0, transid: '', receivedate: new Date() }]
+      onlineamount: [
+        ...formData.onlineamount,
+        { amount: 0, transid: "", receivedate: new Date() },
+      ],
     });
   };
 
@@ -127,11 +133,11 @@ const TractorForm = () => {
   // Handle cheque amount array updates
   const handleChequeAmountChange = (index, field, value) => {
     const updatedChequeAmounts = [...formData.chequeamount];
-    if (field === 'amount') {
+    if (field === "amount") {
       updatedChequeAmounts[index].amount = Number(value);
-    } else if (field === 'chequeid') {
+    } else if (field === "chequeid") {
       updatedChequeAmounts[index].chequeid = value;
-    } else if (field === 'receivedate') {
+    } else if (field === "receivedate") {
       updatedChequeAmounts[index].receivedate = new Date(value);
     }
     setFormData({ ...formData, chequeamount: updatedChequeAmounts });
@@ -141,7 +147,10 @@ const TractorForm = () => {
   const addChequeAmount = () => {
     setFormData({
       ...formData,
-      chequeamount: [...formData.chequeamount, { amount: 0, chequeid: '', receivedate: new Date() }]
+      chequeamount: [
+        ...formData.chequeamount,
+        { amount: 0, chequeid: "", receivedate: new Date() },
+      ],
     });
   };
 
@@ -157,20 +166,24 @@ const TractorForm = () => {
     const newErrors = {};
 
     // Required string fields
-    if (!formData.bname) newErrors.bname = 'Buyer name is required';
+    if (!formData.bname) newErrors.bname = "Buyer name is required";
     if (!formData.fname) newErrors.fname = "Father's name is required";
-    if (!formData.model) newErrors.model = 'Model is required';
-    if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-    if (!formData.engine) newErrors.engine = 'Engine number is required';
-    if (!formData.address) newErrors.address = 'Address is required';
+    if (!formData.model) newErrors.model = "Model is required";
+    if (!formData.chassis) newErrors.chassis = "Chassis number is required";
+    if (!formData.engine) newErrors.engine = "Engine number is required";
+    if (!formData.address) newErrors.address = "Address is required";
 
     // Required number fields
-    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
-    if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
+    if (!formData.mobile) newErrors.mobile = "Mobile number is required";
+    if (!formData.saleamount) newErrors.saleamount = "Sale amount is required";
 
     // Validate mobile number format
-    if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
-      newErrors.mobile = 'Please enter a valid mobile number';
+    if (
+      formData.mobile &&
+      (String(formData.mobile).length < 10 ||
+        String(formData.mobile).length > 12)
+    ) {
+      newErrors.mobile = "Please enter a valid mobile number";
     }
 
     setErrors(newErrors);
@@ -186,32 +199,32 @@ const TractorForm = () => {
     }
     try {
       // Replace with your API endpoint
-      const response = await fetch('/api/tractors', {
-        method: 'POST',
+      const response = await fetch("/api/tractors", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      console.log(JSON.stringify(formData))
+      console.log(JSON.stringify(formData));
 
       if (response.ok) {
-        alert('Tractor data saved successfully!'); // Redirect to tractors list page
+        alert("Tractor data saved successfully!"); // Redirect to tractors list page
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Failed to save tractor data'}`);
+        alert(`Error: ${errorData.message || "Failed to save tractor data"}`);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred while saving the data. Please try again.');
+      console.error("Error submitting form:", error);
+      alert("An error occurred while saving the data. Please try again.");
     }
   };
 
   // Format date for input field
   const formatDateForInput = (date) => {
     return date instanceof Date
-      ? date.toISOString().split('T')[0]
-      : new Date().toISOString().split('T')[0];
+      ? date.toISOString().split("T")[0]
+      : new Date().toISOString().split("T")[0];
   };
 
   useEffect(() => {
@@ -220,18 +233,21 @@ const TractorForm = () => {
       if (response.ok) {
         const data = await response.json();
         setLastData({
-            lastSaleDate:  data.saledate.toString("dd-mm-yyyy"),
-          lastInvoice:  data.invoice || 0 
+          lastSaleDate: data.saledate.toString("dd-mm-yyyy"),
+          lastInvoice: data.invoice || 0,
         });
-        setFormData({ ...formData, invoice: lastData.lastInvoice +1 });
+        setFormData({ ...formData, invoice: lastData.lastInvoice + 1 });
       }
-    }
+    };
     getLastRecord();
   }, []);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold">New Tractor Entry</h1>
-      <p className=' mb-6'>Last Invoice Date : {lastData.lastSaleDate},Last Invoic No. :{lastData.lastInvoice}</p>
+      <p className=" mb-6">
+        Last Invoice Date : {lastData.lastSaleDate},Last Invoic No. :
+        {lastData.lastInvoice}
+      </p>
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -248,9 +264,11 @@ const TractorForm = () => {
                   name="bname"
                   value={formData.bname}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.bname}</p>}
+                {errors.bname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.bname}</p>
+                )}
               </div>
 
               <div>
@@ -262,9 +280,11 @@ const TractorForm = () => {
                   name="fname"
                   value={formData.fname}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.fname ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.fname ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.fname && <p className="text-red-500 text-xs mt-1">{errors.fname}</p>}
+                {errors.fname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.fname}</p>
+                )}
               </div>
 
               <div>
@@ -276,9 +296,11 @@ const TractorForm = () => {
                   name="model"
                   value={formData.model}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.model && <p className="text-red-500 text-xs mt-1">{errors.model}</p>}
+                {errors.model && (
+                  <p className="text-red-500 text-xs mt-1">{errors.model}</p>
+                )}
               </div>
 
               <div>
@@ -290,9 +312,11 @@ const TractorForm = () => {
                   name="chassis"
                   value={formData.chassis}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.chassis && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
+                {errors.chassis && (
+                  <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>
+                )}
               </div>
 
               <div>
@@ -304,9 +328,11 @@ const TractorForm = () => {
                   name="engine"
                   value={formData.engine}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
+                {errors.engine && (
+                  <p className="text-red-500 text-xs mt-1">{errors.engine}</p>
+                )}
               </div>
 
               <div>
@@ -316,11 +342,13 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="mobile"
-                  value={formData.mobile || ''}
+                  value={formData.mobile || ""}
                   onChange={handleNumberChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
+                {errors.mobile && (
+                  <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>
+                )}
               </div>
 
               <div>
@@ -332,7 +360,9 @@ const TractorForm = () => {
                   name="GSTIN"
                   value={formData.GSTIN.GSTIN}
                   onChange={handleInputChange}
-                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                  className={
+                    "w-full px-3 py-2 border rounded-md border-gray-300"
+                  }
                 />
               </div>
 
@@ -343,7 +373,7 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="GST_Rate"
-                  value={formData.GST_Rate || ''}
+                  value={formData.GST_Rate || ""}
                   onChange={handleNumberChange}
                   className={`w-full px-3 py-2 border rounded-md border-gray-300`}
                 />
@@ -357,7 +387,9 @@ const TractorForm = () => {
                   name="saledate"
                   value={formData.saledate}
                   onChange={handleInputChange}
-                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                  className={
+                    "w-full px-3 py-2 border rounded-md border-gray-300"
+                  }
                 />
               </div>
               <div>
@@ -367,12 +399,12 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="invoice"
-                  value={formData.invoice || ''}
+                  value={formData.invoice || ""}
                   onChange={handleNumberChange}
                   className={`w-full px-3 py-2 border rounded-md border-gray-300`}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium  text-gray-700 mb-1">
                   Big HSN
                 </label>
@@ -384,7 +416,7 @@ const TractorForm = () => {
                   className={`px-3 py-2 border rounded-md `}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium text-gray-700 mb-1">
                   Is IGST
                 </label>
@@ -398,7 +430,6 @@ const TractorForm = () => {
               </div>
             </div>
 
-
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Docs*
@@ -407,9 +438,11 @@ const TractorForm = () => {
                 name="docs"
                 value={formData.docs}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.docs && <p className="text-red-500 text-xs mt-1">{errors.docs}</p>}
+              {errors.docs && (
+                <p className="text-red-500 text-xs mt-1">{errors.docs}</p>
+              )}
             </div>
 
             <div className="mt-4">
@@ -421,9 +454,11 @@ const TractorForm = () => {
                 value={formData.address}
                 onChange={handleInputChange}
                 rows={3}
-                className={`w-full px-3 py-2 border rounded-md ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.address ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+              {errors.address && (
+                <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              )}
             </div>
           </div>
 
@@ -437,11 +472,13 @@ const TractorForm = () => {
               <input
                 type="number"
                 name="saleamount"
-                value={formData.saleamount || ''}
+                value={formData.saleamount || ""}
                 onChange={handleNumberChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}
+              {errors.saleamount && (
+                <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>
+              )}
             </div>
           </div>
 
@@ -456,8 +493,10 @@ const TractorForm = () => {
                   </label>
                   <input
                     type="number"
-                    value={cash.amount || ''}
-                    onChange={(e) => handleCashAmountChange(index, 'amount', e.target.value)}
+                    value={cash.amount || ""}
+                    onChange={(e) =>
+                      handleCashAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -468,7 +507,13 @@ const TractorForm = () => {
                   <input
                     type="date"
                     value={formatDateForInput(cash.receivedate)}
-                    onChange={(e) => handleCashAmountChange(index, 'receivedate', e.target.value)}
+                    onChange={(e) =>
+                      handleCashAmountChange(
+                        index,
+                        "receivedate",
+                        e.target.value,
+                      )
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -496,15 +541,20 @@ const TractorForm = () => {
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Online Payments</h2>
             {formData.onlineamount.map((online, index) => (
-              <div key={`online-${index}`} className="grid grid-cols-3 gap-4 mb-4">
+              <div
+                key={`online-${index}`}
+                className="grid grid-cols-3 gap-4 mb-4"
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
                   <input
                     type="number"
-                    value={online.amount || ''}
-                    onChange={(e) => handleOnlineAmountChange(index, 'amount', e.target.value)}
+                    value={online.amount || ""}
+                    onChange={(e) =>
+                      handleOnlineAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -515,7 +565,9 @@ const TractorForm = () => {
                   <input
                     type="text"
                     value={online.transid}
-                    onChange={(e) => handleOnlineAmountChange(index, 'transid', e.target.value)}
+                    onChange={(e) =>
+                      handleOnlineAmountChange(index, "transid", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -527,7 +579,13 @@ const TractorForm = () => {
                     <input
                       type="date"
                       value={formatDateForInput(online.receivedate)}
-                      onChange={(e) => handleOnlineAmountChange(index, 'receivedate', e.target.value)}
+                      onChange={(e) =>
+                        handleOnlineAmountChange(
+                          index,
+                          "receivedate",
+                          e.target.value,
+                        )
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -556,15 +614,20 @@ const TractorForm = () => {
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Cheque Payments</h2>
             {formData.chequeamount.map((cheque, index) => (
-              <div key={`cheque-${index}`} className="grid grid-cols-3 gap-4 mb-4">
+              <div
+                key={`cheque-${index}`}
+                className="grid grid-cols-3 gap-4 mb-4"
+              >
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
                   <input
                     type="number"
-                    value={cheque.amount || ''}
-                    onChange={(e) => handleChequeAmountChange(index, 'amount', e.target.value)}
+                    value={cheque.amount || ""}
+                    onChange={(e) =>
+                      handleChequeAmountChange(index, "amount", e.target.value)
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -575,7 +638,13 @@ const TractorForm = () => {
                   <input
                     type="text"
                     value={cheque.chequeid}
-                    onChange={(e) => handleChequeAmountChange(index, 'chequeid', e.target.value)}
+                    onChange={(e) =>
+                      handleChequeAmountChange(
+                        index,
+                        "chequeid",
+                        e.target.value,
+                      )
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
@@ -587,7 +656,13 @@ const TractorForm = () => {
                     <input
                       type="date"
                       value={formatDateForInput(cheque.receivedate)}
-                      onChange={(e) => handleChequeAmountChange(index, 'receivedate', e.target.value)}
+                      onChange={(e) =>
+                        handleChequeAmountChange(
+                          index,
+                          "receivedate",
+                          e.target.value,
+                        )
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-md"
                     />
                   </div>
@@ -623,7 +698,7 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="loanamount"
-                  value={formData.loanamount || ''}
+                  value={formData.loanamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -655,10 +730,11 @@ const TractorForm = () => {
             </div>
           </div>
 
-
           {/* Old Tractor Information */}
           <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Old Tractor Exchange Information</h2>
+            <h2 className="text-xl font-semibold mb-3">
+              Old Tractor Exchange Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -668,6 +744,18 @@ const TractorForm = () => {
                   type="text"
                   name="oldtractorname"
                   value={formData.oldtractorname}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Old Tractor Purchase Amount
+                </label>
+                <input
+                  type="number"
+                  name="oldtractorpurchaseamount"
+                  value={formData.oldtractorpurchaseamount}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -701,7 +789,9 @@ const TractorForm = () => {
 
           {/* Registration and Insurance */}
           <div className="col-span-2">
-            <h2 className="text-xl font-semibold mb-3">Registration and Insurance</h2>
+            <h2 className="text-xl font-semibold mb-3">
+              Registration and Insurance
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -734,7 +824,7 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="regamount"
-                  value={formData.regamount || ''}
+                  value={formData.regamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
@@ -746,7 +836,7 @@ const TractorForm = () => {
                 <input
                   type="number"
                   name="insureamount"
-                  value={formData.insureamount || ''}
+                  value={formData.insureamount || ""}
                   onChange={handleNumberChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 />
