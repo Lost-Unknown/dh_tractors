@@ -21,7 +21,7 @@ const Buyer_Edit = () => {
     docs: "",
     GSTIN: "",
     isIGST: false,
-    GST_Rate: 5,
+    GST_rate: 5,
     bighsn: true,
     saleamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
@@ -104,7 +104,7 @@ const Buyer_Edit = () => {
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === "" ? null : Number(value) });
+    setFormData({ ...formData, [name]: value === "" ? 0 : Number(value) });
 
     // Clear error when field is edited
     if (errors[name]) {
@@ -387,7 +387,7 @@ const Buyer_Edit = () => {
                 <input
                   type="text"
                   name="GSTIN"
-                  value={formData.GSTIN.GSTIN}
+                  value={formData.GSTIN}
                   onChange={handleInputChange}
                   className={"w-full px-3 py-2 border rounded-md"}
                 />
@@ -400,8 +400,8 @@ const Buyer_Edit = () => {
                 <input
                   type="number"
                   name="GST_Rate"
-                  value={formData.GST_Rate || ""}
-                  onChange={handleNumberChange}
+                  value={formData.GST_rate}
+                  onChange={handleInputChange}
                   className={`w-full px-3 py-2 border rounded-md `}
                 />
               </div>

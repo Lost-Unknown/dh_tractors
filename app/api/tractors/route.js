@@ -84,6 +84,10 @@ export async function PATCH(request) {
       insureno: body.insureno,
       regamount: body.regamount === null ? 0 : body.regamount,
       insureamount: body.insureamount === null ? 0 : body.insureamount,
+      oldtractorname: body.oldtractorname,
+      oldtractorpurchaseamount: body.oldtractorpurchaseamount,
+      oldtractorsaleamount: body.oldtractorsaleamount,
+      oldSaleMediator: body.oldSaleMediator,
     };
     const updatedTractor = await Tractor.findByIdAndUpdate(id, newTractor, {
       new: true,

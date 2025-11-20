@@ -1,11 +1,11 @@
-"use client"
-import React, { useState } from 'react'
-import Link from 'next/link';
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
 
 const Stock_Transfer = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [count,setCount] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [count, setCount] = useState("");
   const [rows, setRows] = useState([]);
 
   const getreport = async () => {
@@ -39,8 +39,8 @@ const Stock_Transfer = () => {
     try {
       const response = await fetch(`/api/stocktransfercount/${count}`);
       if (response.ok) {
-        const tractors = await response.json()
-        console.log("Success")
+        const tractors = await response.json();
+        console.log("Success");
         setRows(tractors); // Assuming response is like { success: true, data: [...] }
       } else {
         alert("Failed to fetch data.");
@@ -52,47 +52,52 @@ const Stock_Transfer = () => {
   };
 
   return (
-    <div className='flex flex-col h-dvh'>
-        <div className=' py-2 bg-white content-center h-12 flex w-full gap-3 px-3 '>
-          <label className='my-auto text-gray-900'>From</label>
-          <input
-            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <label className='my-auto text-gray-900'>-</label>
-          <label className='my-auto text-gray-900'>To</label>
-          <input
-            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
-            onClick={getreport}
-          >
-            Search
-          </button>
-          <div className=' border-r-1'></div>
-          <label className='my-auto text-gray-900'>Count :</label>
-          <input
-            className='border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1'
-            type="number"
-            value={count}
-            onChange={(e) => setCount(e.target.value)}
-          />
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
-            onClick={getreportforcount}
-          >
-            Search
-          </button>
-          <div className='flex grow'></div>
-          <Link className=' text-white bg-blue-600 hover:bg-blue-900 py-1 px-6 rounded-md' href={"/Stock_Transfer/New_Transfer"}>New Sale</Link>
-        </div>
-      <div className='bg-blue-50 h-full'>
+    <div className="flex flex-col h-dvh">
+      <div className=" py-2 bg-white content-center h-12 flex w-full gap-3 px-3 ">
+        <label className="my-auto text-gray-900">From</label>
+        <input
+          className="border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <label className="my-auto text-gray-900">-</label>
+        <label className="my-auto text-gray-900">To</label>
+        <input
+          className="border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1"
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+          onClick={getreport}
+        >
+          Search
+        </button>
+        <div className=" border-r-1"></div>
+        <label className="my-auto text-gray-900">Count :</label>
+        <input
+          className="border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1"
+          type="number"
+          value={count}
+          onChange={(e) => setCount(e.target.value)}
+        />
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+          onClick={getreportforcount}
+        >
+          Search
+        </button>
+        <div className="flex grow"></div>
+        <Link
+          className=" text-white bg-blue-600 hover:bg-blue-900 py-1 px-6 rounded-md"
+          href={"/Stock_Transfer/New_Transfer"}
+        >
+          New Sale
+        </Link>
+      </div>
+      <div className="bg-blue-50 h-full">
         <div className="overflow-x-auto shadow-md rounded-lg">
           <table className="min-w-full bg-white">
             <thead className="bg-gray-50">
@@ -136,26 +141,22 @@ const Stock_Transfer = () => {
                     {new Date(row.saledate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {row.docs ? <>
-                      <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`https://${row.docs}`}>
-                        Documents
-                      </Link>
-                    </> : <></>}
-                    <Link className="text-blue-600 hover:text-blue-900" href={`/Stock_Transfer/Invoice/?id=${row._id}`}>
+                    <Link
+                      className="text-blue-600 hover:text-blue-900"
+                      target="_blank"
+                      href={`/Stock_Transfer/Invoice/?id=${row._id}`}
+                    >
                       Invoice
-                    </Link>
-                    <Link className="text-blue-600 hover:text-blue-900 mx-2" href={`/BuyerDetails/Edit?id=${row._id}`}>
-                      Edit
-                    </Link>
-                    <Link className="text-blue-600 hover:text-blue-900" href={`/BuyerDetails/?id=${row._id}`}>
-                      Details
                     </Link>
                   </td>
                 </tr>
               ))}
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
                     No data available
                   </td>
                 </tr>

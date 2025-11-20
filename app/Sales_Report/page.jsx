@@ -37,7 +37,9 @@ const Sales_Report = () => {
     }
 
     try {
-      const response = await fetch(`/api/tractor_count/${count}`);
+      const response = await fetch(`/api/tractor_count/${count}`, {
+        next: { revalidate: 0 },
+      });
       if (response.ok) {
         const tractors = await response.json();
         console.log("Success");
@@ -144,6 +146,7 @@ const Sales_Report = () => {
                     <Link
                       className="text-blue-600 hover:text-blue-900"
                       href={`/BuyerDetails/?id=${row._id}`}
+                      target="_blank"
                     >
                       Details
                     </Link>
