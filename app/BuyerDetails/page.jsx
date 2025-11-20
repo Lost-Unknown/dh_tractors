@@ -57,7 +57,9 @@ const BuyerDetails = () => {
       data.onlineamount.forEach((element) => {
         totalReceivedAmount += element.amount;
       });
-      totalReceivedAmount += data.oldtractorpurchaseamount + data.loanamount;
+      if (data.oldtractorpurchaseamount != undefined)
+        totalReceivedAmount += data.oldtractorpurchaseamount;
+      totalReceivedAmount += data.loanamount;
       data.pendingamount = data.saleamount - totalReceivedAmount;
       setPost(data);
     };

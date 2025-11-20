@@ -236,11 +236,13 @@ const TractorForm = () => {
           lastSaleDate: data.saledate.toString("dd-mm-yyyy"),
           lastInvoice: data.invoice || 0,
         });
-        setFormData({ ...formData, invoice: lastData.lastInvoice + 1 });
       }
     };
     getLastRecord();
   }, []);
+  useEffect(() => {
+    setFormData({ ...formData, invoice: lastData.lastInvoice + 1 });
+  }, [lastData]);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold">New Tractor Entry</h1>

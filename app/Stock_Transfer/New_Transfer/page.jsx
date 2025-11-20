@@ -1,15 +1,14 @@
-"use client"
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 const TransferForm = () => {
-
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
-    bname: '',
-    model: '',
-    chassis: '',
-    engine: '',
+    bname: "",
+    model: "",
+    chassis: "",
+    engine: "",
     mobile: 0,
-    address: '',
+    address: "",
     docs: "",
     GSTIN: "",
     invoice: 0,
@@ -17,12 +16,52 @@ const TransferForm = () => {
     isIGST: false,
     GST_Rate: 5,
     bighsn: true,
-    saleamount: 0
+    saleamount: 0,
   });
+
+  const Dealers = [
+    {
+      bname: "M/s Anshika Enterprises",
+      address: "Gwalison Road, Near CSD Canteen, Jhajjar, Haryana",
+      mobile: 9992015581,
+      GSTIN: "06BFWPP7235J2ZO",
+      location: "Jhajjar",
+    },
+    {
+      bname: "M/s Shri Shyam Tractors",
+      address: "Near Anaj Mandi, Beri, Haryana 124201",
+      mobile: 9671717140,
+      GSTIN: "06AEDFS6356N1ZH",
+      location: "Beri",
+    },
+    {
+      bname: "M/s BBD Enterprises",
+      address:
+        "Near Vita Plant, Nangli ParsapurR oad, Bawal, Distt. Rewari, Haryana 123501",
+      mobile: 9700097625,
+      GSTIN: "06EQQPS3913C1ZO",
+      location: "Bawal",
+    },
+    {
+      bname: "M/s M.R. Automobiles",
+      address:
+        "Near Swastik Hospital, Jhajjar Road, Bahadurgarh, Haryana 124507",
+      mobile: 9812313212,
+      GSTIN: "06AAZFM7566N1Z3",
+      location: "Bahadurgarh",
+    },
+    {
+      bname: "M/S Bala Ji Tractors",
+      address: "Gurugram Road, Dadri Toe Jhaija, Haryana, 124103",
+      mobile: 8527085007,
+      GSTIN: "06ABAFB0229R1ZF",
+      location: "Badli",
+    },
+  ];
 
   const [lastData, setLastData] = useState({
     lastInvoice: 0,
-    lastSaleDate: ""
+    lastSaleDate: "",
   });
 
   // Form validation state
@@ -42,7 +81,7 @@ const TransferForm = () => {
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value === '' ? null : Number(value) });
+    setFormData({ ...formData, [name]: value === "" ? null : Number(value) });
 
     // Clear error when field is edited
     if (errors[name]) {
@@ -61,19 +100,23 @@ const TransferForm = () => {
     const newErrors = {};
 
     // Required string fields
-    if (!formData.bname) newErrors.bname = 'Buyer name is required';
-    if (!formData.model) newErrors.model = 'Model is required';
-    if (!formData.chassis) newErrors.chassis = 'Chassis number is required';
-    if (!formData.engine) newErrors.engine = 'Engine number is required';
-    if (!formData.address) newErrors.address = 'Address is required';
+    if (!formData.bname) newErrors.bname = "Buyer name is required";
+    if (!formData.model) newErrors.model = "Model is required";
+    if (!formData.chassis) newErrors.chassis = "Chassis number is required";
+    if (!formData.engine) newErrors.engine = "Engine number is required";
+    if (!formData.address) newErrors.address = "Address is required";
 
     // Required number fields
-    if (!formData.mobile) newErrors.mobile = 'Mobile number is required';
-    if (!formData.saleamount) newErrors.saleamount = 'Sale amount is required';
+    if (!formData.mobile) newErrors.mobile = "Mobile number is required";
+    if (!formData.saleamount) newErrors.saleamount = "Sale amount is required";
 
     // Validate mobile number format
-    if (formData.mobile && (String(formData.mobile).length < 10 || String(formData.mobile).length > 12)) {
-      newErrors.mobile = 'Please enter a valid mobile number';
+    if (
+      formData.mobile &&
+      (String(formData.mobile).length < 10 ||
+        String(formData.mobile).length > 12)
+    ) {
+      newErrors.mobile = "Please enter a valid mobile number";
     }
 
     setErrors(newErrors);
@@ -89,51 +132,81 @@ const TransferForm = () => {
     }
     try {
       // Replace with your API endpoint
-      const response = await fetch('/api/stocktransfer', {
-        method: 'POST',
+      const response = await fetch("/api/stocktransfer", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      console.log(JSON.stringify(formData))
+      console.log(JSON.stringify(formData));
 
       if (response.ok) {
-        alert('Tractor data saved successfully!'); // Redirect to tractors list page
+        alert("Tractor data saved successfully!"); // Redirect to tractors list page
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'Failed to save tractor data'}`);
+        alert(`Error: ${errorData.message || "Failed to save tractor data"}`);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred while saving the data. Please try again.');
+      console.error("Error submitting form:", error);
+      alert("An error occurred while saving the data. Please try again.");
     }
   };
-  
-  // useEffect(() => {
-  //   const getLastRecord = async () => {
-  //     const response = await fetch(`/api/details`);
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       setLastData({
-  //           lastSaleDate:  data.saledate.toString("dd-mm-yyyy"),
-  //         lastInvoice:  data.invoice || 0 
-  //       });
-  //       setFormData({ ...formData, invoice: lastData.lastInvoice +1 });
-  //     }
-  //   }
-  //   getLastRecord();
-  // }, []);
+
+  const HandleDropDownChange = (event) => {
+    setFormData({
+      ...formData,
+      bname: Dealers[event.target.value].bname,
+      mobile: Dealers[event.target.value].mobile,
+      address: Dealers[event.target.value].address,
+      GSTIN: Dealers[event.target.value].GSTIN,
+    });
+  };
+
+  useEffect(() => {
+    const getLastRecord = async () => {
+      const response = await fetch(`/api/stocktransfer`);
+      if (response.ok) {
+        const data = await response.json();
+        setLastData({
+          ...lastData,
+          lastInvoice: data.invoice,
+          lastSaleDate: data.saledate,
+        });
+      }
+    };
+    getLastRecord();
+  }, []);
+
+  useEffect(() => {
+    setFormData({ ...formData, invoice: lastData.lastInvoice + 1 });
+  }, [lastData]);
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold">New Tractor Entry</h1>
-      <p className=' mb-6'>Last Invoice Date : {lastData.lastSaleDate},Last Invoic No. :{lastData.lastInvoice}</p>
+      <p className=" mb-6">
+        Last Invoice Date : {lastData.lastSaleDate},Last Invoic No. :
+        {lastData.lastInvoice}
+      </p>
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Basic Information */}
           <div className="col-span-2">
             <h2 className="text-xl font-semibold mb-3">Basic Information</h2>
+            <label className="text-2xl">Dealer : </label>
+            <select
+              className="text-2xl border rounded border-gray-300 px-3 py-1 mb-1"
+              id="Dealers"
+              name="Dealers"
+              onChange={(event) => HandleDropDownChange(event)}
+            >
+              {Dealers.map((item, index) => (
+                <option key={index} value={index}>
+                  {item.bname + ", " + item.location}
+                </option>
+              ))}
+            </select>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -144,9 +217,11 @@ const TransferForm = () => {
                   name="bname"
                   value={formData.bname}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.bname ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.bname && <p className="text-red-500 text-xs mt-1">{errors.bname}</p>}
+                {errors.bname && (
+                  <p className="text-red-500 text-xs mt-1">{errors.bname}</p>
+                )}
               </div>
 
               <div>
@@ -158,9 +233,11 @@ const TransferForm = () => {
                   name="model"
                   value={formData.model}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.model ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.model && <p className="text-red-500 text-xs mt-1">{errors.model}</p>}
+                {errors.model && (
+                  <p className="text-red-500 text-xs mt-1">{errors.model}</p>
+                )}
               </div>
 
               <div>
@@ -172,9 +249,11 @@ const TransferForm = () => {
                   name="chassis"
                   value={formData.chassis}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.chassis && <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>}
+                {errors.chassis && (
+                  <p className="text-red-500 text-xs mt-1">{errors.chassis}</p>
+                )}
               </div>
 
               <div>
@@ -186,9 +265,11 @@ const TransferForm = () => {
                   name="engine"
                   value={formData.engine}
                   onChange={handleInputChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.engine ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.engine && <p className="text-red-500 text-xs mt-1">{errors.engine}</p>}
+                {errors.engine && (
+                  <p className="text-red-500 text-xs mt-1">{errors.engine}</p>
+                )}
               </div>
 
               <div>
@@ -198,11 +279,13 @@ const TransferForm = () => {
                 <input
                   type="number"
                   name="mobile"
-                  value={formData.mobile || ''}
+                  value={formData.mobile || ""}
                   onChange={handleNumberChange}
-                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border rounded-md ${errors.mobile ? "border-red-500" : "border-gray-300"}`}
                 />
-                {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>}
+                {errors.mobile && (
+                  <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>
+                )}
               </div>
 
               <div>
@@ -212,9 +295,11 @@ const TransferForm = () => {
                 <input
                   type="text"
                   name="GSTIN"
-                  value={formData.GSTIN.GSTIN}
+                  value={formData.GSTIN}
                   onChange={handleInputChange}
-                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                  className={
+                    "w-full px-3 py-2 border rounded-md border-gray-300"
+                  }
                 />
               </div>
 
@@ -225,7 +310,7 @@ const TransferForm = () => {
                 <input
                   type="number"
                   name="GST_Rate"
-                  value={formData.GST_Rate || ''}
+                  value={formData.GST_Rate || ""}
                   onChange={handleNumberChange}
                   className={`w-full px-3 py-2 border rounded-md border-gray-300`}
                 />
@@ -239,7 +324,9 @@ const TransferForm = () => {
                   name="saledate"
                   value={formData.saledate}
                   onChange={handleInputChange}
-                  className={'w-full px-3 py-2 border rounded-md border-gray-300'}
+                  className={
+                    "w-full px-3 py-2 border rounded-md border-gray-300"
+                  }
                 />
               </div>
               <div>
@@ -249,12 +336,12 @@ const TransferForm = () => {
                 <input
                   type="number"
                   name="invoice"
-                  value={formData.invoice || ''}
+                  value={formData.invoice || ""}
                   onChange={handleNumberChange}
                   className={`w-full px-3 py-2 border rounded-md border-gray-300`}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium  text-gray-700 mb-1">
                   Big HSN
                 </label>
@@ -266,7 +353,7 @@ const TransferForm = () => {
                   className={`px-3 py-2 border rounded-md `}
                 />
               </div>
-              <div className='flex'>
+              <div className="flex">
                 <label className="text-sm flex grow font-medium text-gray-700 mb-1">
                   Is IGST
                 </label>
@@ -280,7 +367,6 @@ const TransferForm = () => {
               </div>
             </div>
 
-
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Docs*
@@ -289,9 +375,11 @@ const TransferForm = () => {
                 name="docs"
                 value={formData.docs}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.docs ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.docs && <p className="text-red-500 text-xs mt-1">{errors.docs}</p>}
+              {errors.docs && (
+                <p className="text-red-500 text-xs mt-1">{errors.docs}</p>
+              )}
             </div>
 
             <div className="mt-4">
@@ -303,9 +391,11 @@ const TransferForm = () => {
                 value={formData.address}
                 onChange={handleInputChange}
                 rows={3}
-                className={`w-full px-3 py-2 border rounded-md ${errors.address ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.address ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+              {errors.address && (
+                <p className="text-red-500 text-xs mt-1">{errors.address}</p>
+              )}
             </div>
           </div>
 
@@ -319,11 +409,13 @@ const TransferForm = () => {
               <input
                 type="number"
                 name="saleamount"
-                value={formData.saleamount || ''}
+                value={formData.saleamount || ""}
                 onChange={handleNumberChange}
-                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border rounded-md ${errors.saleamount ? "border-red-500" : "border-gray-300"}`}
               />
-              {errors.saleamount && <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>}
+              {errors.saleamount && (
+                <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>
+              )}
             </div>
           </div>
         </div>
@@ -342,7 +434,7 @@ const TransferForm = () => {
             Save Tractor
           </button>
         </div>
-        </form>
+      </form>
     </div>
   );
 };
