@@ -171,7 +171,7 @@ const TransferForm = () => {
         setLastData({
           ...lastData,
           lastInvoice: data.invoice,
-          lastSaleDate: data.saledate,
+          lastSaleDate: new Date(data.saledate).toLocaleDateString(),
         });
       }
     };

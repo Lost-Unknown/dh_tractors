@@ -233,7 +233,7 @@ const TractorForm = () => {
       if (response.ok) {
         const data = await response.json();
         setLastData({
-          lastSaleDate: data.saledate.toString("dd-mm-yyyy"),
+          lastSaleDate: new Date(data.saledate).toLocaleDateString(),
           lastInvoice: data.invoice || 0,
         });
       }
