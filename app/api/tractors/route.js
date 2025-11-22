@@ -22,6 +22,7 @@ export async function POST(request) {
       isIGST: body.isIGST,
       bighsn: body.bighsn,
       saleamount: body.saleamount,
+      quoteamount: body.quoteamount == undefined ? 0 : body.quoteamount,
       cashamount: body.cashamount, // array of { amount, receivedate }
       onlineamount: body.onlineamount,
       chequeamount: body.chequeamount, // array of { amount, transid, receivedate }
@@ -73,6 +74,7 @@ export async function PATCH(request) {
     const newTractor = {
       docs: body.docs,
       saleamount: body.saleamount,
+      quoteamount: body.quoteamount,
       cashamount: processArray(body.cashamount),
       onlineamount: processArray(body.onlineamount),
       chequeamount: processArray(body.chequeamount),

@@ -24,6 +24,7 @@ const Buyer_Edit = () => {
     GST_rate: 5,
     bighsn: true,
     saleamount: 0,
+    quoteamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
     onlineamount: [{ amount: 0, transid: "", receivedate: new Date() }],
     chequeamount: [{ amount: 0, chequeid: "", receivedate: new Date() }],
@@ -479,6 +480,25 @@ const Buyer_Edit = () => {
               />
               {errors.saleamount && (
                 <p className="text-red-500 text-xs mt-1">{errors.saleamount}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Quote Information */}
+          <div className="col-span-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Quote Amount*
+              </label>
+              <input
+                type="number"
+                name="quoteamount"
+                value={formData.quoteamount || ""}
+                onChange={handleNumberChange}
+                className={`w-full px-3 py-2 border rounded-md ${errors.quotemount ? "border-red-500" : "border-gray-300"}`}
+              />
+              {errors.quotemount && (
+                <p className="text-red-500 text-xs mt-1">{errors.quotemount}</p>
               )}
             </div>
           </div>

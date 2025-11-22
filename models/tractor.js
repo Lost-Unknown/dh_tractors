@@ -17,6 +17,7 @@ const TractorSchema = new Schema({
   isIGST: { type: Boolean },
   bighsn: { type: Boolean },
   saleamount: { type: Number, required: [true] },
+  quoteamount: { type: Number, required: [true] },
   cashamount: [
     {
       amount: { type: Number },
