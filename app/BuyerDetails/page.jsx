@@ -26,6 +26,7 @@ const BuyerDetails = () => {
     chassis: "",
     engine: "",
     GSTIN: "",
+    isImplement: "",
     saleamount: "",
     cashamount: [],
     chequeamount: [],
@@ -71,6 +72,7 @@ const BuyerDetails = () => {
         totalReceivedAmount += data.oldtractorpurchaseamount;
       totalReceivedAmount += data.loanamount;
       data.pendingamount = data.saleamount - totalReceivedAmount;
+      console.log(data.isImplement);
       setPost(data);
     };
 

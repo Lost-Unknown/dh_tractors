@@ -23,6 +23,7 @@ const Buyer_Edit = () => {
     isIGST: false,
     GST_rate: 5,
     bighsn: true,
+    isImplement: false,
     saleamount: 0,
     quoteamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
@@ -75,6 +76,7 @@ const Buyer_Edit = () => {
       }
       if (data.oldtractorpurchaseamount == undefined)
         data.oldtractorpurchaseamount = 0;
+      if (data.isImplement == undefined) data.isImplement = false;
 
       setFormData(data);
     };
@@ -426,6 +428,18 @@ const Buyer_Edit = () => {
                   type="checkbox"
                   name="isIGST"
                   checked={formData.isIGST}
+                  onChange={handleBooleanChange}
+                  className={`px-3 py-2 border rounded-md `}
+                />
+              </div>
+              <div className="flex">
+                <label className="text-sm flex grow font-medium text-gray-700 mb-1">
+                  Is Implement
+                </label>
+                <input
+                  type="checkbox"
+                  name="isImplement"
+                  checked={formData.isImplement}
                   onChange={handleBooleanChange}
                   className={`px-3 py-2 border rounded-md `}
                 />

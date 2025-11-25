@@ -21,6 +21,7 @@ export async function POST(request) {
       GST_rate: body.GST_Rate,
       isIGST: body.isIGST,
       bighsn: body.bighsn,
+      isImplement: body.isImplement,
       saleamount: body.saleamount,
       quoteamount: body.quoteamount == undefined ? 0 : body.quoteamount,
       cashamount: body.cashamount, // array of { amount, receivedate }
@@ -75,6 +76,7 @@ export async function PATCH(request) {
       docs: body.docs,
       saleamount: body.saleamount,
       quoteamount: body.quoteamount,
+      isImplement: body.isImplement,
       cashamount: processArray(body.cashamount),
       onlineamount: processArray(body.onlineamount),
       chequeamount: processArray(body.chequeamount),

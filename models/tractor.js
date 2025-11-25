@@ -16,6 +16,7 @@ const TractorSchema = new Schema({
   GST_rate: { type: Number },
   isIGST: { type: Boolean },
   bighsn: { type: Boolean },
+  isImplement: { type: Boolean },
   saleamount: { type: Number, required: [true] },
   quoteamount: { type: Number, required: [true] },
   cashamount: [

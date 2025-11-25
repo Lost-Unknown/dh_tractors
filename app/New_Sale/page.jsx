@@ -17,8 +17,9 @@ const TractorForm = () => {
     isIGST: false,
     GST_Rate: 5,
     bighsn: true,
+    isImplement: false,
     saleamount: 0,
-    quotemount: 0,
+    quoteamount: 0,
     cashamount: [{ amount: 0, receivedate: new Date() }],
     onlineamount: [{ amount: 0, transid: "", receivedate: new Date() }],
     chequeamount: [{ amount: 0, chequeid: "", receivedate: new Date() }],
@@ -431,6 +432,18 @@ const TractorForm = () => {
                   className={`px-3 py-2 border rounded-md `}
                 />
               </div>
+              <div className="flex">
+                <label className="text-sm flex grow font-medium text-gray-700 mb-1">
+                  Is Implement
+                </label>
+                <input
+                  type="checkbox"
+                  name="isImplement"
+                  checked={formData.isImplement}
+                  onChange={handleBooleanChange}
+                  className={`px-3 py-2 border rounded-md `}
+                />
+              </div>
             </div>
 
             <div className="mt-4">
@@ -494,7 +507,7 @@ const TractorForm = () => {
               <input
                 type="number"
                 name="quoteamount"
-                value={formData.quotemount || ""}
+                value={formData.quoteamount || ""}
                 onChange={handleNumberChange}
                 className={`w-full px-3 py-2 border rounded-md ${errors.quotemount ? "border-red-500" : "border-gray-300"}`}
               />
