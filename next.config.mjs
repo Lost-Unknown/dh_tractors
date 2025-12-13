@@ -1,6 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-  transpilePackages: ["amount-to-words"],
-};
+const nextConfig = {};
 
 export default nextConfig;
