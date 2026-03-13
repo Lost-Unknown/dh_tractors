@@ -26,8 +26,6 @@ const TractorTable = ({ data, isQuote, isImplement }) => {
       const tempgstamount =
         (isQuote ? Number(data.quoteamount) : Number(data.saleamount)) -
         temptaxablevalue;
-      console.log(isImplement);
-      console.log(data.isImplement);
       setTableData({
         chassis: data.chassis,
         model: data.model,
@@ -108,6 +106,8 @@ const TractorTable = ({ data, isQuote, isImplement }) => {
           {tabelData.isImplement ? (
             <td className="border border-gray-400 pl-2  text-left">
               {tabelData.model}
+              <br />
+              Serial : {tabelData.chassis + " " + tabelData.engine}
             </td>
           ) : (
             <td className="border border-gray-400 pl-2  text-left">

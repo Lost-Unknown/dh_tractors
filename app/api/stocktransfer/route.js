@@ -19,6 +19,7 @@ export async function POST(request) {
       GSTIN: body.GSTIN,
       GST_rate: body.GST_Rate,
       isIGST: body.isIGST,
+      isImplement: body.isImplement,
       bighsn: body.bighsn,
       saleamount: body.saleamount,
     });

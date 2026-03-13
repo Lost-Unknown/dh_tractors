@@ -13,6 +13,7 @@ const TransferForm = () => {
     invoice: 0,
     saledate: new Date(),
     isIGST: false,
+    isImplement: false,
     GST_Rate: 5,
     bighsn: true,
     saleamount: 0,
@@ -360,6 +361,18 @@ const TransferForm = () => {
                   type="checkbox"
                   name="isIGST"
                   checked={formData.isIGST}
+                  onChange={handleBooleanChange}
+                  className={`px-3 py-2 border rounded-md `}
+                />
+              </div>
+              <div className="flex">
+                <label className="text-sm flex grow font-medium text-gray-700 mb-1">
+                  Is Implement
+                </label>
+                <input
+                  type="checkbox"
+                  name="isImplement"
+                  checked={formData.isImplements}
                   onChange={handleBooleanChange}
                   className={`px-3 py-2 border rounded-md `}
                 />
