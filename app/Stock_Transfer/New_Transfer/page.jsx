@@ -62,7 +62,7 @@ const TransferForm = () => {
       address: "Shastri Nagar, Mahendergarh Road, Rewari, Haryana 123401",
       mobile: 8607177942,
       GSTIN: "06AFBFS7378K1ZF",
-      loaction: "Rewari",
+      location: "Rewari",
     },
   ];
 
