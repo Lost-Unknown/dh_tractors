@@ -52,10 +52,17 @@ const TransferForm = () => {
     },
     {
       bname: "M/S Bala Ji Tractors",
-      address: "Gurugram Road, Dadri Toe Jhaija, Haryana, 124103",
+      address: "Gurugram Road, Dadri Toe Jhajjar, Haryana, 124103",
       mobile: 8527085007,
       GSTIN: "06ABAFB0229R1ZF",
       location: "Badli",
+    },
+    {
+      bname: "M/S Shri Dadu Dayal Trators",
+      address: "Shastri Nagar, Mahendergarh Road, Rewari, Haryana 123401",
+      mobile: 8607177942,
+      GSTIN: "06AFBFS7378K1ZF",
+      loaction: "Rewari",
     },
   ];
 
