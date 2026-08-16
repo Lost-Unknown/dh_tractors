@@ -44,7 +44,7 @@ const Service_Invoice = () => {
             const response = await fetch(`/api/service_invoice/${invoiceid}`)
             const data = await response.json();
 
-            var templabourtaxable =0 
+            var templabourtaxable =0
             var templabourtax =0;
             var tempparttaxable = 0
             var tempparttax = 0
@@ -56,13 +56,13 @@ const Service_Invoice = () => {
                 const quantity = Number(element.quantity) || 0;
                 const final = Number(element.final) || 0;
                 const rate = (final / (118)) * 100;
-                const currenttaxableValue = rate * quantity;
-                tempparttaxable = Number(tempparttaxable) + Number(currenttaxableValue.toFixed(2));
+                const currenttaxableValue = Number(rate * quantity).toFixed(2);
+                tempparttaxable += Number(currenttaxableValue);
                 const gstAmt = (currenttaxableValue * 18) / 100
                 tempparttax = Number(tempparttax) + Number(gstAmt.toFixed(2));
             });
             const sub = partslist.substring(0, partslist.length - 1);
-            
+
             //Setting Labout Details
             data.jobs.forEach(element => {
                 const final = Number(element.cost) || 0;
@@ -83,12 +83,12 @@ const Service_Invoice = () => {
                 }));
                 setSpareData(cleanedSpares);
             }
-            data.parttaxable = tempparttaxable;
-            data.parttax = tempparttax;
-            data.labourtaxable = templabourtaxable;
-            data.labourtax = templabourtax;
-            data.grandtotal = tempparttaxable +tempparttax +templabourtaxable +templabourtax;
-            
+            data.parttaxable = tempparttaxable.toFixed(2);
+            data.parttax = tempparttax.toFixed(2);
+            data.labourtaxable = templabourtaxable.toFixed(2);
+            data.labourtax = templabourtax.toFixed(2);
+            data.grandtotal = (tempparttaxable +tempparttax +templabourtaxable +templabourtax).toFixed(2);
+
             const newdate = new Date(data.date)
 
             //Setting actual date for invoice
@@ -99,8 +99,8 @@ const Service_Invoice = () => {
             newdate.getFullYear()
             ].join('-');
 
-            //Setting Actual Invoice Number 
-            data.actualinvoice =  'S'+ (data.invoice<10 ? "0"+data.invoice: data.invoice);
+            //Setting Actual Invoice Number
+            data.actualinvoice =  'SW'+ (data.invoice<10 ? "0"+data.invoice: data.invoice);
             setPost(data)
 
         }
