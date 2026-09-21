@@ -159,6 +159,7 @@ const Service_Invoice = () => {
 
                 {/* SparePart and Labour Details */}
                 <div className='w-full flex flex-col items-start'>
+                    
                     <h1 className='font-bold py-2'>Part Details</h1>
                     <div className="w-full">
 

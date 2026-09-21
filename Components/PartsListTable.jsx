@@ -23,6 +23,8 @@ const PartsListTable = ({ data ,spares }) => {
         totalValue:0
     })
 
+    var isValid = false;
+
     useEffect(() => {
   const getDetails = () => {
     if (!data || !spares) return;
@@ -33,51 +35,57 @@ const PartsListTable = ({ data ,spares }) => {
     let totalSGST = 0;
     let totalIGST = 0;
     let totalValue = 0;
+    console.log(data);
 
     const rowData = data.map((item, index) => {
+        if(spares[index] == undefined){
+            isValid = false;
+            return;
+        }
+        isValid = true;
         const name = spares[index].name;
         const hsn = spares[index].hsn;
-      const gstRate = Number(spares[index]?.gst || 0);
-      const quantity = Number(item.quantity) || 0;
-      const final = Number(item.final) || 0;
+        const gstRate = Number(spares[index]?.gst || 0);
+        const quantity = Number(item.quantity) || 0;
+        const final = Number(item.final) || 0;
 
-      // Rate without GST
-      const rate = (final / (100 + gstRate)) * 100;
+        // Rate without GST
+        const rate = (final / (100 + gstRate)) * 100;
 
-      // Taxable value
-      const taxableValue = rate * quantity;
+        // Taxable value
+        const taxableValue = rate * quantity;
 
-      // GST splits
-      const cgstRate = gstRate / 2;
-      const sgstRate = gstRate / 2;
-      const igstRate = 0; // assuming intra-state for now
+        // GST splits
+        const cgstRate = gstRate / 2;
+        const sgstRate = gstRate / 2;
+        const igstRate = 0; // assuming intra-state for now
 
-      const cgstAmt = (taxableValue * cgstRate) / 100;
-      const sgstAmt = (taxableValue * sgstRate) / 100;
-      const igstAmt = (taxableValue * igstRate) / 100;
+        const cgstAmt = (taxableValue * cgstRate) / 100;
+        const sgstAmt = (taxableValue * sgstRate) / 100;
+        const igstAmt = (taxableValue * igstRate) / 100;
 
-      const finalTotal = taxableValue + cgstAmt + sgstAmt + igstAmt;
+        const finalTotal = taxableValue + cgstAmt + sgstAmt + igstAmt;
 
-      // Accumulate totals
-      totalQuantity += quantity;
-      totalTaxableValue += taxableValue;
-      totalCGST += cgstAmt;
-      totalSGST += sgstAmt;
-      totalIGST += igstAmt;
-      totalValue += finalTotal;
+        // Accumulate totals
+        totalQuantity += quantity;
+        totalTaxableValue += taxableValue;
+        totalCGST += cgstAmt;
+        totalSGST += sgstAmt;
+        totalIGST += igstAmt;
+        totalValue += finalTotal;
 
-      return {
-        name: name || "",
-        hsn: hsn || "",
-        quantity,
-        rate: rate.toFixed(2),
-        taxableValue: taxableValue.toFixed(2),
-        gstRate,
-        cgst: cgstAmt.toFixed(2),
-        sgst: sgstAmt.toFixed(2),
-        igst: igstAmt.toFixed(2),
-        finalTotal: finalTotal.toFixed(2),
-      };
+        return {
+          name: name || "",
+          hsn: hsn || "",
+          quantity,
+          rate: rate.toFixed(2),
+          taxableValue: taxableValue.toFixed(2),
+          gstRate,
+          cgst: cgstAmt.toFixed(2),
+          sgst: sgstAmt.toFixed(2),
+          igst: igstAmt.toFixed(2),
+          finalTotal: finalTotal.toFixed(2),
+        };
     });
 
     setTableData({
@@ -93,7 +101,10 @@ const PartsListTable = ({ data ,spares }) => {
 
   if (data) getDetails();
 }, [data, spares]);
-
+    if(!isValid){
+        <></>
+    }
+    else{
     return (
         <table className="w-full border border-gray-400 text-xs text-center">
             <thead>
@@ -155,6 +166,7 @@ const PartsListTable = ({ data ,spares }) => {
             </tbody>
         </table>
     )
+}
 }
 
 export default PartsListTable
