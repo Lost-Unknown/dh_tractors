@@ -83,6 +83,7 @@ export async function PATCH(request) {
       loanamount: body.loanamount === null ? 0 : body.loanamount,
       loantranid: body.loantranid,
       loanprovider: body.loanprovider,
+      GSTIN: body.GSTIN,
       pendingamount: body.pendingamount === null ? 0 : body.pendingamount,
       regno: body.regno,
       insureno: body.insureno,

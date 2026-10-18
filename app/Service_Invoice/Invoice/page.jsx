@@ -178,7 +178,7 @@ const Service_Invoice = () => {
 
                 {/* Grant Total */}
                 <div className='flex w-full'>
-                    <div className='flex w-1/2 border-r-1'>
+                    <div className='flex w-1/2 border-r'>
                         <h1 className=' font-bold underline'>Terms and Conditions</h1>
                     </div>
                     <div className='flex w-1/2 pl-2 flex-col'>

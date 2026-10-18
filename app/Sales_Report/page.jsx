@@ -17,6 +17,8 @@ const Sales_Report = () => {
     try {
       const Range = `${startDate}=${endDate}`;
       const response = await fetch(`/api/tractors/${Range}`);
+
+      console.log(response);
       if (response.ok) {
         const tractors = await response.json();
         console.log("Success");
