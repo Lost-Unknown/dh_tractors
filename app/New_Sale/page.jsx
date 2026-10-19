@@ -1,6 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 const TractorForm = () => {
+
+  const router = useRouter();
   // Initialize form state with empty values
   const [formData, setFormData] = useState({
     bname: "",
@@ -208,10 +212,12 @@ const TractorForm = () => {
         },
         body: JSON.stringify(formData),
       });
-      console.log(JSON.stringify(formData));
 
       if (response.ok) {
-        alert("Tractor data saved successfully!"); // Redirect to tractors list page
+        const { SavedData } = await response.json()
+        console.log(SavedData);
+        router.push(`/BuyerDetails?id=${SavedData._id}`);
+        //alert("Tractor data saved successfully!"); // Redirect to tractors list page
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message || "Failed to save tractor data"}`);
@@ -522,7 +528,7 @@ const TractorForm = () => {
             <h2 className="text-xl font-semibold mb-3">Cash Payments</h2>
             {formData.cashamount.map((cash, index) => (
               <div key={`cash-${index}`} className="flex items-end gap-4 mb-4">
-                <div className="flex-grow">
+                <div className="grow">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
@@ -535,7 +541,7 @@ const TractorForm = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="flex-grow">
+                <div className="grow">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Receive Date
                   </label>
@@ -607,7 +613,7 @@ const TractorForm = () => {
                   />
                 </div>
                 <div className="flex items-end gap-2">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Receive Date
                     </label>
@@ -684,7 +690,7 @@ const TractorForm = () => {
                   />
                 </div>
                 <div className="flex items-end gap-2">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Receive Date
                     </label>

@@ -41,10 +41,9 @@ export async function POST(request) {
       insureamount: body.insureamount,
     });
 
-    await newTractor.save();
-
+    const SavedData =  await newTractor.save();
     return new Response(
-      JSON.stringify({ message: "Tractor added successfully!" }),
+      JSON.stringify({SavedData}),
       {
         status: 201,
       },

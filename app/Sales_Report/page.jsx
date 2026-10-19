@@ -55,6 +55,31 @@ const Sales_Report = () => {
     }
   };
 
+  // 1. Added the delete handler function
+  const handleDelete = async (id) => {
+    // Ask for confirmation before deleting
+    if (!window.confirm("Are you sure you want to delete this record?")) {
+      return;
+    }
+
+    try {
+      // Call your delete API endpoint
+      const response = await fetch(`/api/details/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // 2. Hide the row by filtering it out of the current state
+        setRows((prevRows) => prevRows.filter((row) => row._id !== id));
+      } else {
+        alert("Failed to delete the record.");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("An error occurred while deleting.");
+    }
+  };
+
   return (
     <div className="flex flex-col h-dvh">
       <div className=" py-2 bg-white content-center h-12 flex w-full gap-3 px-3 ">
@@ -79,7 +104,7 @@ const Sales_Report = () => {
         >
           Search
         </button>
-        <div className=" border-r-1"></div>
+        <div className=" border-r"></div>
         <label className="my-auto text-gray-900">Count :</label>
         <input
           className="border-gray-900 text-gray-900 border-2 rounded-md px-1 py-1"
@@ -146,12 +171,18 @@ const Sales_Report = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <Link
-                      className="text-blue-600 hover:text-blue-900"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-4 rounded transition duration-150 ease-in-out mr-2"
                       href={`/BuyerDetails/?id=${row._id}`}
                       target="_blank"
                     >
                       Details
                     </Link>
+                    <button
+                      className="bg-red-600 hover:bg-red-700 text-white font-medium py-1 px-4 rounded transition duration-150 ease-in-out"
+                      onClick={() => handleDelete(row._id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

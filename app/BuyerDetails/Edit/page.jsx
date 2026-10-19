@@ -522,7 +522,7 @@ const Buyer_Edit = () => {
             <h2 className="text-xl font-semibold mb-3">Cash Payments</h2>
             {formData.cashamount.map((cash, index) => (
               <div key={`cash-${index}`} className="flex items-end gap-4 mb-4">
-                <div className="flex-grow">
+                <div className="grow">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Amount
                   </label>
@@ -535,7 +535,7 @@ const Buyer_Edit = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   />
                 </div>
-                <div className="flex-grow">
+                <div className="grow">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Receive Date
                   </label>
@@ -607,7 +607,7 @@ const Buyer_Edit = () => {
                   />
                 </div>
                 <div className="flex items-end gap-2">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Receive Date
                     </label>
@@ -684,7 +684,7 @@ const Buyer_Edit = () => {
                   />
                 </div>
                 <div className="flex items-end gap-2">
-                  <div className="flex-grow">
+                  <div className="grow">
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Receive Date
                     </label>

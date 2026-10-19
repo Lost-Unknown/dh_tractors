@@ -7,7 +7,7 @@ const InvoiceHeader = () => {
       <div className="w-full flex relative">
         <img
           className=" absolute mt-4"
-          src="/SwarajLogo.png"
+          src="/LogoNew.png"
           width={160}
           height={40}
           alt="Logo"
