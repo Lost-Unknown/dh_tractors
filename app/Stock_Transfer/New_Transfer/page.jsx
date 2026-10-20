@@ -21,6 +21,13 @@ const TransferForm = () => {
 
   const Dealers = [
     {
+      bname: "Choose Dealership",
+      address: "",
+      mobile: 0,
+      GSTIN: "",
+      location: "",  
+    },
+    {
       bname: "M/s Anshika Enterprises",
       address: "Gwalison Road, Near CSD Canteen, Jhajjar, Haryana",
       mobile: 9992015581,
@@ -64,6 +71,13 @@ const TransferForm = () => {
       GSTIN: "06AFBFS7378K1ZF",
       location: "Rewari",
     },
+    {
+      bname: "M/S Khalsa Traders",
+      address: "Near Anaj Mandi, Kosi Road, Kaman, Deeg, Rajasthan 321022",
+      mobile: 9818966154,
+      GSTIN: "08ABEFK4466D1ZC",
+      location: "Kaman",
+    }
   ];
 
   const [lastData, setLastData] = useState({
@@ -85,6 +99,16 @@ const TransferForm = () => {
     }
   };
 
+  const handleInputChangeinCaps = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value.toUpperCase() });
+
+    // Clear error when field is edited
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: undefined });
+    }
+  };
+
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +119,7 @@ const TransferForm = () => {
       setErrors({ ...errors, [name]: undefined });
     }
   };
+
 
   // Handle boolean input changes
   const handleBooleanChange = (e) => {
@@ -255,7 +280,7 @@ const TransferForm = () => {
                   type="text"
                   name="chassis"
                   value={formData.chassis}
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeinCaps}
                   className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.chassis && (
@@ -271,7 +296,7 @@ const TransferForm = () => {
                   type="text"
                   name="engine"
                   value={formData.engine}
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeinCaps}
                   className={`w-full px-3 py-2 border rounded-md ${errors.engine ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.engine && (

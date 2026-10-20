@@ -59,6 +59,17 @@ const TractorForm = () => {
     }
   };
 
+
+  const handleInputChangeinCaps = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value.toUpperCase() });
+
+    // Clear error when field is edited
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: undefined });
+    }
+  };
+
   // Handle number input changes
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
@@ -321,7 +332,7 @@ const TractorForm = () => {
                   type="text"
                   name="chassis"
                   value={formData.chassis}
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeinCaps}
                   className={`w-full px-3 py-2 border rounded-md ${errors.chassis ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.chassis && (
@@ -337,7 +348,7 @@ const TractorForm = () => {
                   type="text"
                   name="engine"
                   value={formData.engine}
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeinCaps}
                   className={`w-full px-3 py-2 border rounded-md ${errors.engine ? "border-red-500" : "border-gray-300"}`}
                 />
                 {errors.engine && (
@@ -368,8 +379,8 @@ const TractorForm = () => {
                 <input
                   type="text"
                   name="GSTIN"
-                  value={formData.GSTIN.GSTIN}
-                  onChange={handleInputChange}
+                  value={formData.GSTIN || ""}
+                  onChange={handleInputChangeinCaps}
                   className={
                     "w-full px-3 py-2 border rounded-md border-gray-300"
                   }
